@@ -48,6 +48,43 @@
       overflow-x: hidden;
     }
 
+    /* Top Navigation Tabs */
+    .top-nav {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 6px;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-link:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-link.active {
+      background: #4f46e5;
+      color: #ffffff;
+      box-shadow: 0 2px 10px rgba(79, 70, 229, 0.5);
+    }
+
     /* Header */
     header {
       text-align: center;
@@ -599,6 +636,12 @@
   </style>
 </head>
 <body>
+
+  <!-- Top Navigation Tabs -->
+  <nav class="top-nav">
+    <a href="index.html" class="nav-link active">🧩 Game 1: Vocab Match</a>
+    <a href="sentences.html" class="nav-link">✍️ Game 2: Sentence Builder</a>
+  </nav>
 
   <!-- Header -->
   <header>
