@@ -44,14 +44,14 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 1.5rem 1rem 3rem;
+      padding: 1.25rem 1rem 3rem;
       overflow-x: hidden;
     }
 
     /* Header */
     header {
       text-align: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
       animation: fadeInDown 0.6s ease-out;
     }
 
@@ -66,7 +66,7 @@
       font-size: 0.85rem;
       font-weight: 600;
       color: #a5b4fc;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.5rem;
       backdrop-filter: blur(8px);
     }
 
@@ -78,7 +78,7 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       letter-spacing: -0.02em;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.3rem;
     }
 
     p.subtitle {
@@ -87,13 +87,56 @@
       max-width: 600px;
     }
 
+    /* Timer Difficulty Selector */
+    .time-selector-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 1rem;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 4px 8px;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .time-selector-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      padding-left: 8px;
+    }
+
+    .time-chip {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .time-chip:hover {
+      color: #ffffff;
+    }
+
+    .time-chip.active {
+      background: #4f46e5;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.5);
+    }
+
     /* Stats Bar */
     .stats-bar {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
       width: 100%;
       max-width: 1100px;
       animation: fadeIn 0.8s ease-out;
@@ -103,7 +146,7 @@
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       backdrop-filter: blur(12px);
-      padding: 0.5rem 1.25rem;
+      padding: 0.5rem 1.15rem;
       border-radius: 9999px;
       display: flex;
       align-items: center;
@@ -118,6 +161,49 @@
       font-size: 1.1rem;
     }
 
+    /* Countdown Timer Pill Styling */
+    .timer-pill {
+      background: rgba(14, 165, 233, 0.15);
+      border: 1.5px solid rgba(14, 165, 233, 0.4);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .timer-pill.warning {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: var(--warning);
+      color: #fde68a;
+    }
+
+    .timer-pill.warning .value {
+      color: #fbbf24 !important;
+    }
+
+    .timer-pill.critical {
+      background: rgba(239, 68, 68, 0.3);
+      border-color: var(--danger);
+      animation: timerPulse 0.8s infinite;
+    }
+
+    .timer-pill.critical .value {
+      color: #f87171 !important;
+    }
+
+    .time-bonus-badge {
+      position: absolute;
+      top: -12px;
+      right: -8px;
+      background: #10b981;
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 9999px;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.6);
+      animation: floatUp 0.8s ease-out forwards;
+      pointer-events: none;
+    }
+
     /* Main Container */
     .game-container {
       display: grid;
@@ -126,6 +212,7 @@
       width: 100%;
       max-width: 1100px;
       animation: fadeInUp 0.7s ease-out;
+      position: relative;
     }
 
     @media (max-width: 860px) {
@@ -171,7 +258,7 @@
       height: 32px;
       transform: translate(-50%, -50%);
       border-radius: 50%;
-      background: rgba(79, 70, 229, 0.85);
+      background: rgba(79, 70, 229, 0.88);
       border: 2px solid #ffffff;
       color: #ffffff;
       display: flex;
@@ -214,6 +301,7 @@
       flex-direction: column;
       backdrop-filter: blur(16px);
       box-shadow: var(--shadow-glow);
+      position: relative;
     }
 
     .tab-bar {
@@ -433,7 +521,7 @@
       color: #ffffff;
     }
 
-    /* Feedback Modal / Alert */
+    /* Feedback Banner */
     .message-banner {
       min-height: 28px;
       font-size: 0.9rem;
@@ -460,18 +548,26 @@
       0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
       50% { box-shadow: 0 0 0 12px rgba(245, 158, 11, 0); }
     }
+    @keyframes timerPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
+      50% { transform: scale(1.05); box-shadow: 0 0 15px 4px rgba(239, 68, 68, 0.4); }
+    }
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
       20%, 60% { transform: translateX(-6px); }
       40%, 80% { transform: translateX(6px); }
     }
+    @keyframes floatUp {
+      0% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-20px); }
+    }
 
-    /* Celebration Banner */
-    .winner-overlay {
+    /* Overlay Card (Victory & Time's Up) */
+    .game-overlay {
       display: none;
       position: absolute;
       inset: 0;
-      background: rgba(15, 23, 42, 0.92);
+      background: rgba(15, 23, 42, 0.94);
       border-radius: var(--radius-lg);
       z-index: 50;
       flex-direction: column;
@@ -479,19 +575,26 @@
       justify-content: center;
       padding: 2rem;
       text-align: center;
-      backdrop-filter: blur(8px);
+      backdrop-filter: blur(12px);
       animation: fadeIn 0.4s ease;
     }
 
-    .winner-overlay.show {
+    .game-overlay.show {
       display: flex;
     }
 
-    .winner-overlay h2 {
+    .game-overlay h2 {
       font-family: 'Outfit', sans-serif;
       font-size: 2.2rem;
-      color: #38bdf8;
       margin-bottom: 0.5rem;
+    }
+
+    .game-overlay.win h2 {
+      color: #38bdf8;
+    }
+
+    .game-overlay.lose h2 {
+      color: #f87171;
     }
   </style>
 </head>
@@ -501,15 +604,26 @@
   <header>
     <div class="badge">🏡 English Learning Interactive</div>
     <h1>House Vocabulary Game</h1>
-    <p class="subtitle">Explore the house, match the letters A–K with the right vocabulary words, and test your knowledge!</p>
+    <p class="subtitle">Beat the countdown clock! Match letters A–K with the correct house vocabulary words.</p>
   </header>
+
+  <!-- Countdown Difficulty Selector -->
+  <div class="time-selector-bar">
+    <span class="time-selector-label">⏱️ Time Limit:</span>
+    <button class="time-chip" onclick="setTimeLimit(30)" id="chip30">⚡ 30s Blitz</button>
+    <button class="time-chip active" onclick="setTimeLimit(60)" id="chip60">⏱️ 60s Standard</button>
+    <button class="time-chip" onclick="setTimeLimit(90)" id="chip90">🧘 90s Relaxed</button>
+  </div>
 
   <!-- Statistics -->
   <div class="stats-bar">
+    <div class="stat-pill timer-pill" id="timerPill">
+      ⏳ <span id="timerLabel">Time Left:</span>
+      <span class="value" id="countdown">60s</span>
+    </div>
     <div class="stat-pill">⭐ Score: <span class="value" id="score">0</span></div>
     <div class="stat-pill">🎯 Matches: <span class="value" id="matchedCount">0</span> / 11</div>
     <div class="stat-pill">🔥 Streak: <span class="value" id="streak">0</span></div>
-    <div class="stat-pill">⏱️ Timer: <span class="value" id="timer">00:00</span></div>
   </div>
 
   <!-- Game Arena -->
@@ -548,8 +662,8 @@
       <!-- Mode 1: Match Words -->
       <div id="matchSection">
         <div class="task-header">
-          <div class="task-title" id="matchInstruction">1. Select a letter on the house or a word below</div>
-          <div class="task-desc">Match every room and furniture piece to its letter!</div>
+          <div class="task-title" id="matchInstruction">Select a letter on the house or a word below</div>
+          <div class="task-desc">Correct matches add +3 bonus seconds to your timer!</div>
         </div>
 
         <div class="vocab-grid" id="vocabGrid">
@@ -593,18 +707,34 @@
 
       <!-- Controls -->
       <div class="control-actions">
-        <button class="btn btn-outline" onclick="hintLetter()">💡 Hint</button>
+        <button class="btn btn-outline" onclick="hintLetter()">💡 Hint (-3s)</button>
         <button class="btn btn-primary" onclick="restartGame()">🔄 Restart</button>
       </div>
 
       <!-- Victory Overlay -->
-      <div class="winner-overlay" id="winnerOverlay">
+      <div class="game-overlay win" id="winnerOverlay">
         <h2>🎉 Outstanding!</h2>
-        <p style="margin-bottom: 1.5rem; color: #cbd5e1;">You mastered all the house vocabulary words!</p>
-        <div style="font-size: 1.1rem; margin-bottom: 1.5rem;">
-          Final Score: <strong style="color: #38bdf8;" id="finalScore">0</strong> in <strong style="color: #38bdf8;" id="finalTime">00:00</strong>
+        <p style="margin-bottom: 1.25rem; color: #cbd5e1;">You mastered all the vocabulary before time expired!</p>
+        <div style="font-size: 1.05rem; margin-bottom: 0.5rem;">
+          Base Score: <strong style="color: #ffffff;" id="baseScore">0</strong>
+        </div>
+        <div style="font-size: 1.05rem; margin-bottom: 0.5rem; color: #10b981;">
+          ⚡ Time Bonus: <strong id="timeBonus">+0</strong>
+        </div>
+        <div style="font-size: 1.3rem; margin-bottom: 1.5rem;">
+          Final Score: <strong style="color: #38bdf8;" id="finalScore">0</strong>
         </div>
         <button class="btn btn-primary" style="max-width: 220px;" onclick="restartGame()">Play Again</button>
+      </div>
+
+      <!-- Time's Up Overlay -->
+      <div class="game-overlay lose" id="timesUpOverlay">
+        <h2>⏰ Time's Up!</h2>
+        <p style="margin-bottom: 1.25rem; color: #cbd5e1;">The clock ran out before all rooms were identified.</p>
+        <div style="font-size: 1.1rem; margin-bottom: 1.5rem;">
+          You completed <strong style="color: #f59e0b;" id="lostCompletedCount">0</strong> of 11 items!
+        </div>
+        <button class="btn btn-primary" style="max-width: 220px;" onclick="restartGame()">Try Again ⚡</button>
       </div>
 
     </div>
@@ -633,8 +763,12 @@
     let matchedLetters = new Set();
     let score = 0;
     let streak = 0;
-    let timerSeconds = 0;
+
+    // Countdown Timer State
+    let selectedTimeLimit = 60; // default 60s
+    let timeRemaining = 60;
     let timerInterval = null;
+    let isGameOver = false;
 
     // Quiz State
     let quizIndex = 0;
@@ -671,6 +805,20 @@
         gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
         osc.start(now);
         osc.stop(now + 0.25);
+      } else if (type === 'tick') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(800, now);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+        osc.start(now);
+        osc.stop(now + 0.05);
+      } else if (type === 'buzzer') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, now);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+        osc.start(now);
+        osc.stop(now + 0.6);
       } else if (type === 'win') {
         [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
           const noteOsc = audioCtx.createOscillator();
@@ -691,30 +839,83 @@
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = 0.9;
+        utterance.rate = 0.95;
         utterance.lang = 'en-US';
         window.speechSynthesis.speak(utterance);
       }
     }
 
-    // Initialize
+    // Time Limit Selector
+    function setTimeLimit(seconds) {
+      selectedTimeLimit = seconds;
+      document.querySelectorAll('.time-chip').forEach(c => c.classList.remove('active'));
+      const chip = document.getElementById(`chip${seconds}`);
+      if (chip) chip.classList.add('active');
+      restartGame();
+    }
+
+    // Initialize Game
     function init() {
-      startTimer();
+      isGameOver = false;
+      startCountdown();
       renderVocabGrid();
       setupHotspots();
       updateStats();
     }
 
-    // Timer
-    function startTimer() {
+    // Countdown Timer Logic
+    function startCountdown() {
       clearInterval(timerInterval);
-      timerSeconds = 0;
+      timeRemaining = selectedTimeLimit;
+      renderCountdownDisplay();
+
       timerInterval = setInterval(() => {
-        timerSeconds++;
-        const mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
-        const secs = String(timerSeconds % 60).padStart(2, '0');
-        document.getElementById('timer').textContent = `${mins}:${secs}`;
+        if (isGameOver) return;
+        timeRemaining--;
+
+        if (timeRemaining <= 10 && timeRemaining > 0) {
+          playSound('tick');
+        }
+
+        if (timeRemaining <= 0) {
+          timeRemaining = 0;
+          renderCountdownDisplay();
+          onTimesUp();
+          return;
+        }
+
+        renderCountdownDisplay();
       }, 1000);
+    }
+
+    function renderCountdownDisplay() {
+      const countdownEl = document.getElementById('countdown');
+      const pill = document.getElementById('timerPill');
+
+      const mins = Math.floor(timeRemaining / 60);
+      const secs = timeRemaining % 60;
+      countdownEl.textContent = mins > 0 
+        ? `${mins}:${String(secs).padStart(2, '0')}` 
+        : `${secs}s`;
+
+      pill.classList.remove('warning', 'critical');
+      if (timeRemaining <= 10) {
+        pill.classList.add('critical');
+      } else if (timeRemaining <= 20) {
+        pill.classList.add('warning');
+      }
+    }
+
+    function addTimeBonus(seconds) {
+      timeRemaining += seconds;
+      renderCountdownDisplay();
+
+      const pill = document.getElementById('timerPill');
+      const badge = document.createElement('div');
+      badge.className = 'time-bonus-badge';
+      badge.textContent = `+${seconds}s`;
+      pill.appendChild(badge);
+      setTimeout(() => badge.remove(), 800);
     }
 
     // Render Vocab Grid
@@ -722,7 +923,6 @@
       const grid = document.getElementById('vocabGrid');
       grid.innerHTML = '';
 
-      // Shuffle list
       const shuffled = [...VOCAB_DATA].sort(() => Math.random() - 0.5);
 
       shuffled.forEach(item => {
@@ -741,6 +941,7 @@
     function setupHotspots() {
       document.querySelectorAll('.hotspot').forEach(spot => {
         spot.addEventListener('click', () => {
+          if (isGameOver) return;
           const letter = spot.dataset.letter;
           onHotspotClick(spot, letter);
         });
@@ -771,7 +972,7 @@
 
     // Click Word Card
     function onWordClick(card, item) {
-      if (matchedLetters.has(item.letter)) return;
+      if (isGameOver || matchedLetters.has(item.letter)) return;
 
       selectedWord = item.word;
       document.querySelectorAll('.word-card').forEach(c => c.classList.remove('selected'));
@@ -796,9 +997,10 @@
 
       if (isCorrect) {
         matchedLetters.add(selectedLetter);
-        score += 100 + (streak * 20);
+        score += 100 + (streak * 25);
         streak++;
         playSound('success');
+        addTimeBonus(3); // +3s bonus reward!
 
         hotspot.classList.remove('active');
         hotspot.classList.add('matched');
@@ -809,7 +1011,7 @@
           wordCard.innerHTML = `<span class="letter-badge">${selectedLetter}</span><span>${selectedWord}</span>`;
         }
 
-        showBanner(`✅ Correct! ${selectedLetter} is ${selectedWord}!`, '#10b981');
+        showBanner(`✅ Correct! ${selectedLetter} = ${selectedWord} (+3s bonus!)`, '#10b981');
 
         if (matchedLetters.size === VOCAB_DATA.length) {
           onGameWon();
@@ -821,7 +1023,7 @@
           wordCard.classList.add('error');
           setTimeout(() => wordCard.classList.remove('error'), 500);
         }
-        showBanner(`❌ Not quite! Try again.`, '#ef4444');
+        showBanner(`❌ Not quite! Keep racing against the clock!`, '#ef4444');
       }
 
       selectedLetter = null;
@@ -880,6 +1082,7 @@
     }
 
     function onQuizSelect(btn, chosen, correct) {
+      if (isGameOver) return;
       const allBtns = document.querySelectorAll('.quiz-btn');
       allBtns.forEach(b => b.disabled = true);
 
@@ -888,7 +1091,8 @@
         playSound('success');
         score += 120 + (streak * 25);
         streak++;
-        showBanner(`✨ Correct!`, '#10b981');
+        addTimeBonus(3);
+        showBanner(`✨ Correct! (+3s bonus!)`, '#10b981');
       } else {
         btn.classList.add('wrong');
         streak = 0;
@@ -901,9 +1105,11 @@
 
       updateStats();
       setTimeout(() => {
-        quizIndex++;
-        renderQuizQuestion();
-      }, 1200);
+        if (!isGameOver) {
+          quizIndex++;
+          renderQuizQuestion();
+        }
+      }, 1100);
     }
 
     function speakCurrentWord() {
@@ -931,12 +1137,14 @@
     }
 
     function checkListenAnswer(letter) {
+      if (isGameOver) return;
       if (letter === listenTarget.letter) {
         matchedLetters.add(letter);
         score += 150;
         streak++;
         playSound('success');
-        showBanner(`🎯 Great job! ${listenTarget.word} is letter ${letter}!`, '#10b981');
+        addTimeBonus(3);
+        showBanner(`🎯 Great job! ${listenTarget.word} = ${letter} (+3s bonus!)`, '#10b981');
 
         const spot = document.querySelector(`.hotspot[data-letter="${letter}"]`);
         if (spot) spot.classList.add('matched');
@@ -946,7 +1154,9 @@
         if (matchedLetters.size === VOCAB_DATA.length) {
           onGameWon();
         } else {
-          setTimeout(startListenMode, 1200);
+          setTimeout(() => {
+            if (!isGameOver) startListenMode();
+          }, 1100);
         }
       } else {
         playSound('error');
@@ -978,10 +1188,16 @@
 
     // Hint
     function hintLetter() {
+      if (isGameOver) return;
       const unmatched = VOCAB_DATA.filter(v => !matchedLetters.has(v.letter));
       if (unmatched.length === 0) return;
       const target = unmatched[0];
-      showBanner(`💡 Hint for ${target.letter}: "${target.hint}"`, '#f59e0b');
+      
+      // Cost 3 seconds penalty for a hint
+      timeRemaining = Math.max(1, timeRemaining - 3);
+      renderCountdownDisplay();
+
+      showBanner(`💡 Hint for ${target.letter} (-3s): "${target.hint}"`, '#f59e0b');
       speakText(target.hint);
     }
 
@@ -999,11 +1215,27 @@
     }
 
     function onGameWon() {
+      isGameOver = true;
       playSound('win');
       clearInterval(timerInterval);
-      document.getElementById('finalScore').textContent = score;
-      document.getElementById('finalTime').textContent = document.getElementById('timer').textContent;
+
+      const timeBonus = timeRemaining * 15;
+      const finalScore = score + timeBonus;
+
+      document.getElementById('baseScore').textContent = score;
+      document.getElementById('timeBonus').textContent = `+${timeBonus} (${timeRemaining}s left × 15)`;
+      document.getElementById('finalScore').textContent = finalScore;
       document.getElementById('winnerOverlay').classList.add('show');
+    }
+
+    function onTimesUp() {
+      isGameOver = true;
+      playSound('buzzer');
+      clearInterval(timerInterval);
+
+      document.getElementById('lostCompletedCount').textContent = matchedLetters.size;
+      document.getElementById('timesUpOverlay').classList.add('show');
+      showBanner('⏰ Time is up!', '#ef4444');
     }
 
     function restartGame() {
@@ -1012,14 +1244,16 @@
       selectedWord = null;
       score = 0;
       streak = 0;
+      isGameOver = false;
       document.getElementById('winnerOverlay').classList.remove('show');
+      document.getElementById('timesUpOverlay').classList.remove('show');
       document.querySelectorAll('.hotspot').forEach(h => {
         h.className = 'hotspot';
       });
       init();
       if (currentMode === 'quiz') startQuizMode();
       if (currentMode === 'listen') startListenMode();
-      showBanner('Game reset! Have fun!', '#38bdf8');
+      showBanner('Game started! Beat the countdown!', '#38bdf8');
     }
 
     // Start on load
