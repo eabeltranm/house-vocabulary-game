@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>House Listening Exercise - Mark Calling Estate Agent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #e0e7ff;
+      --secondary: #0ea5e9;
+      --success: #10b981;
+      --success-light: #d1fae5;
+      --danger: #ef4444;
+      --danger-light: #fee2e2;
+      --warning: #f59e0b;
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+      --card-bg: rgba(255, 255, 255, 0.07);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --badge-bg: rgba(99, 102, 241, 0.2);
+      --radius-lg: 20px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --shadow-glow: 0 10px 30px -10px rgba(79, 70, 229, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.25rem 1rem 3rem;
+      overflow-x: hidden;
+    }
+
+    /* Top Navigation Tabs */
+    .top-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-bottom: 1.25rem;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 6px;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 7px 16px;
+      border-radius: 9999px;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-link:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-link.active {
+      background: #4f46e5;
+      color: #ffffff;
+      box-shadow: 0 2px 10px rgba(79, 70, 229, 0.5);
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 1.25rem;
+      animation: fadeInDown 0.6s ease-out;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--badge-bg);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #a5b4fc;
+      margin-bottom: 0.5rem;
+      backdrop-filter: blur(8px);
+    }
+
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.75rem);
+      font-weight: 800;
+      background: linear-gradient(to right, #ffffff, #c7d2fe, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.3rem;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 650px;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      width: 100%;
+      max-width: 1050px;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .stat-pill {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(12px);
+      padding: 0.5rem 1.15rem;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .stat-pill span.value {
+      color: #38bdf8;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+    }
+
+    /* Audio Player Sticky Card */
+    .player-card {
+      width: 100%;
+      max-width: 1050px;
+      background: rgba(30, 27, 75, 0.65);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      animation: fadeInDown 0.7s ease-out;
+    }
+
+    .player-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .track-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .track-icon {
+      background: #4f46e5;
+      color: #ffffff;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      box-shadow: 0 0 15px rgba(79, 70, 229, 0.6);
+    }
+
+    .track-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #ffffff;
+    }
+
+    .track-sub {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .player-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .play-btn {
+      background: linear-gradient(135deg, #4f46e5 0%, #0ea5e9 100%);
+      border: none;
+      color: #ffffff;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+    }
+
+    .play-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.7);
+    }
+
+    .seek-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-main);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .seek-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .speed-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #38bdf8;
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .transcript-toggle-btn {
+      background: rgba(99, 102, 241, 0.25);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      color: #c7d2fe;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .transcript-toggle-btn:hover {
+      background: #4f46e5;
+      color: #ffffff;
+    }
+
+    /* Progress Bar */
+    .progress-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .time-label {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      min-width: 42px;
+      text-align: center;
+    }
+
+    .progress-bar-container {
+      flex-grow: 1;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #4f46e5, #38bdf8);
+      border-radius: 9999px;
+      position: relative;
+      transition: width 0.1s linear;
+    }
+
+    .progress-bar-fill::after {
+      content: '';
+      position: absolute;
+      right: -4px;
+      top: -3px;
+      width: 14px;
+      height: 14px;
+      background: #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Transcript Box (Collapsible) */
+    .transcript-box {
+      display: none;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      max-height: 250px;
+      overflow-y: auto;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .transcript-box.show {
+      display: block;
+    }
+
+    .speaker-c {
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    .speaker-m {
+      color: #a78bfa;
+      font-weight: 700;
+    }
+
+    .transcript-line {
+      margin-bottom: 0.4rem;
+    }
+
+    /* Main Exercises Container */
+    .exercises-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 1050px;
+    }
+
+    @media (max-width: 860px) {
+      .exercises-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Section Cards */
+    .exercise-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1.2rem;
+    }
+
+    /* Exercise 1: Checklist Cards */
+    .checklist-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .check-item {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 0.8rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .check-item:hover {
+      background: rgba(79, 70, 229, 0.15);
+      border-color: #6366f1;
+    }
+
+    .check-item.selected {
+      background: rgba(79, 70, 229, 0.25);
+      border-color: #818cf8;
+    }
+
+    .check-item.correct {
+      background: rgba(16, 185, 129, 0.2) !important;
+      border-color: var(--success) !important;
+    }
+
+    .check-item.wrong {
+      background: rgba(239, 68, 68, 0.2) !important;
+      border-color: var(--danger) !important;
+    }
+
+    .custom-checkbox {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: #ffffff;
+      background: rgba(0, 0, 0, 0.3);
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .check-item.selected .custom-checkbox {
+      background: #4f46e5;
+      border-color: #818cf8;
+    }
+
+    .check-item.correct .custom-checkbox {
+      background: var(--success);
+      border-color: var(--success);
+    }
+
+    .check-label {
+      font-size: 0.95rem;
+      font-weight: 600;
+      flex-grow: 1;
+    }
+
+    /* Exercise 2: Question Rows */
+    .qa-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .qa-row {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 0.9rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .qa-row:focus-within {
+      border-color: #6366f1;
+      background: rgba(79, 70, 229, 0.12);
+    }
+
+    .qa-row.correct {
+      border-color: var(--success);
+      background: rgba(16, 185, 129, 0.12);
+    }
+
+    .qa-row.incorrect {
+      border-color: var(--danger);
+      background: rgba(239, 68, 68, 0.12);
+    }
+
+    .qa-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .qa-num {
+      background: rgba(255, 255, 255, 0.1);
+      color: #93c5fd;
+      font-weight: 800;
+      font-size: 0.8rem;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .qa-question {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      line-height: 1.4;
+    }
+
+    .qa-input-wrapper {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .qa-input {
+      flex-grow: 1;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-sm);
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 0.9rem;
+      padding: 8px 12px;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .qa-input:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+    }
+
+    .qa-input.correct {
+      border-color: var(--success);
+      background: rgba(16, 185, 129, 0.2);
+      color: #6ee7b7;
+    }
+
+    .qa-hint-text {
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      margin-top: 2px;
+      display: none;
+    }
+
+    .qa-hint-text.show {
+      display: block;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 0.75rem 1.2rem;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+    }
+    .btn-primary:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #cbd5e1;
+    }
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+    }
+
+    .feedback-banner {
+      min-height: 24px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+
+    /* Overlay */
+    .game-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.92);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      animation: fadeIn 0.4s ease;
+    }
+
+    .game-overlay.show {
+      display: flex;
+    }
+
+    .game-overlay h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.3rem;
+      color: #38bdf8;
+      margin-bottom: 0.5rem;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Tabs -->
+  <nav class="top-nav">
+    <a href="index.html" class="nav-link">🧩 Game 1: Vocab Match</a>
+    <a href="sentences.html" class="nav-link">✍️ Game 2: Sentence Builder</a>
+    <a href="listening.html" class="nav-link active">🎧 Game 3: Listening Challenge</a>
+  </nav>
+
+  <!-- Header -->
+  <header>
+    <div class="badge">🎙️ A2 Listening Comprehension</div>
+    <h1>Describing a Home: Calling an Estate Agent</h1>
+    <p class="subtitle">Listen to Mark call estate agent Cathy about a flat on West Street. Complete the exercises below!</p>
+  </header>
+
+  <!-- Statistics -->
+  <div class="stats-bar">
+    <div class="stat-pill">⭐ Total Score: <span class="value" id="score">0</span></div>
+    <div class="stat-pill">📋 Part 1: <span class="value" id="p1Score">0</span> / 5</div>
+    <div class="stat-pill">❓ Part 2: <span class="value" id="p2Score">0</span> / 6</div>
+  </div>
+
+  <!-- Audio Player -->
+  <div class="player-card">
+    <div class="player-top">
+      <div class="track-info">
+        <div class="track-icon">🎧</div>
+        <div>
+          <div class="track-title">Mark Calling an Estate Agent (Flat on West Street)</div>
+          <div class="track-sub">Audio Track: RM_A2_SB_U04_R06.mp3</div>
+        </div>
+      </div>
+
+      <div class="player-controls">
+        <button class="seek-btn" onclick="seekRelative(-5)">⏪ -5s</button>
+        <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+        <button class="seek-btn" onclick="seekRelative(5)">+5s ⏩</button>
+        <button class="speed-btn" id="speedBtn" onclick="cycleSpeed()">1.0x</button>
+        <button class="transcript-toggle-btn" onclick="toggleTranscript()">📜 Transcript</button>
+      </div>
+    </div>
+
+    <!-- Progress Slider -->
+    <div class="progress-wrapper">
+      <span class="time-label" id="currentTime">0:00</span>
+      <div class="progress-bar-container" id="progressContainer" onclick="onProgressClick(event)">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+      <span class="time-label" id="duration">0:00</span>
+    </div>
+
+    <!-- Collapsible Transcript -->
+    <div class="transcript-box" id="transcriptBox">
+      <div class="transcript-line"><span class="speaker-c">Cathy:</span> Hello. Cathy speaking.</div>
+      <div class="transcript-line"><span class="speaker-m">Mark:</span> Oh, hi. My name’s Mark Edwards. I’m calling about the flat on West Street.</div>
+      <div class="transcript-line"><span class="speaker-c">Cathy:</span> Oh yes, are you looking for somewhere to live?</div>
+      <div class="transcript-line"><span class="speaker-m">Mark:</span> That’s right. I’ve got some questions about the flat. Is it a large flat?</div>
+      <div class="transcript-line"><span class="speaker-c">Cathy:</span> It’s not very large but it’s not small. It’s a good size for one person. It’s modern and very comfortable.</div>
+      <div class="transcript-line"><span class="speaker-m">Mark:</span> How many rooms are there?</div>
+      <div class="transcript-line"><span class="speaker-c">Cathy:</span> There’s a hall, then there’s a living room, a kitchen, a bathroom and two bedrooms.</div>
+      <div class="transcript-line"><span class="speaker-m">Mark:</span> Is there furniture in the flat?</div>
+      <div class="transcript-line"><span class="speaker-c">Cathy:</span> Yes, there is. There’s a sofa and dining table and chairs in the living room. There’s a double bed and cupboards in both bedrooms. In one of the bedrooms, there’s also a desk and a chair.</div>
+      <div class="transcript-line"><span class="speaker-m">Mark:</span> Oh great, I sometimes work at home. Is there a shower in the bathroom?</div>
+      <div class="transcript-line"><span class="speaker-c">Cathy:</span> Yes, there’s a shower and a bath.</div>
+      <div class="transcript-line"><span class="speaker-m">Mark:</span> Fantastic. Is there a garden?</div>
+      <div class="transcript-line"><span class="speaker-c">Cathy:</span> Um, yes. There’s a garden for everyone in the building. It’s not private but it’s very pretty. Some of the neighbours sit out and read or have their breakfast there. It’s large so you can find a quiet place to sit.</div>
+      <div class="transcript-line"><span class="speaker-m">Mark:</span> OK. Are there any shops and cafés near the flat?</div>
+      <div class="transcript-line"><span class="speaker-c">Cathy:</span> Yes, there’s a small supermarket about five minutes away. The flat’s in a quiet area but there are other shops and cafés about a fifteen-minute walk away. There’s a bus stop nearby, too.</div>
+      <div class="transcript-line"><span class="speaker-m">Mark:</span> Great. How much is the flat?</div>
+      <div class="transcript-line"><span class="speaker-c">Cathy:</span> It’s £600 per month. Are you interested?</div>
+      <div class="transcript-line"><span class="speaker-m">Mark:</span> Yes, I’d like to see it, please.</div>
+      <div class="transcript-line"><span class="speaker-c">Cathy:</span> Good. Are you free tomorrow at 11 a.m.?</div>
+      <div class="transcript-line"><span class="speaker-m">Mark:</span> Yes, I am.</div>
+      <div class="transcript-line"><span class="speaker-c">Cathy:</span> Meet me in front of the gate to the building and I’ll show you around.</div>
+      <div class="transcript-line"><span class="speaker-m">Mark:</span> Great, see you then!</div>
+    </div>
+  </div>
+
+  <!-- Audio Element -->
+  <audio id="audioElement" src="RM_A2_SB_U04_R06.mp3" preload="metadata"></audio>
+
+  <!-- Exercises Container -->
+  <main class="exercises-grid">
+
+    <!-- Exercise 1: Checklist -->
+    <div class="exercise-card">
+      <div class="section-title">1. Tick what Mark asks about</div>
+      <div class="section-desc">Listen to Mark and tick (✔️) the items in the box he asks about:</div>
+
+      <div class="checklist-container" id="checklistContainer">
+        <!-- Generated by JS -->
+      </div>
+
+      <div class="feedback-banner" id="p1Feedback"></div>
+
+      <div style="display: flex; gap: 8px; margin-top: auto;">
+        <button class="btn btn-outline" style="flex: 1;" onclick="checkPart1()">✔️ Check Part 1</button>
+        <button class="btn btn-outline" onclick="resetPart1()">🔄 Reset</button>
+      </div>
+    </div>
+
+    <!-- Exercise 2: Question & Answer -->
+    <div class="exercise-card">
+      <div class="section-title">2. Listen again & answer the questions</div>
+      <div class="section-desc">Type your answers in the blanks, or press "💡 Hint" if you need help:</div>
+
+      <div class="qa-list" id="qaList">
+        <!-- Generated by JS -->
+      </div>
+
+      <div class="feedback-banner" id="p2Feedback"></div>
+
+      <div style="display: flex; gap: 8px; margin-top: auto;">
+        <button class="btn btn-primary" style="flex: 1;" onclick="checkPart2()">✔️ Check Part 2</button>
+        <button class="btn btn-outline" onclick="givePart2Hint()">💡 Hint</button>
+        <button class="btn btn-outline" onclick="resetPart2()">🔄 Reset</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Victory Overlay -->
+  <div class="game-overlay" id="victoryOverlay">
+    <h2>🎉 Listening Mastered!</h2>
+    <p style="margin-bottom: 1.5rem; color: #cbd5e1;">You scored full marks across both comprehension exercises!</p>
+    <div style="font-size: 1.3rem; margin-bottom: 1.5rem;">
+      Final Score: <strong style="color: #38bdf8;" id="finalScoreVal">0</strong> / 1100
+    </div>
+    <button class="btn btn-primary" style="max-width: 200px;" onclick="closeVictory()">Review Work</button>
+  </div>
+
+  <script>
+    // Audio Player Elements
+    const audio = document.getElementById('audioElement');
+    const playBtn = document.getElementById('playBtn');
+    const speedBtn = document.getElementById('speedBtn');
+    const progressFill = document.getElementById('progressFill');
+    const currentTimeEl = document.getElementById('currentTime');
+    const durationEl = document.getElementById('duration');
+    const transcriptBox = document.getElementById('transcriptBox');
+
+    const speeds = [1.0, 1.25, 0.8];
+    let speedIndex = 0;
+
+    // Sound FX
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playBeep(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      if (type === 'correct') {
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.15);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.3);
+      } else if (type === 'wrong') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(200, now);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+        osc.start(now);
+        osc.stop(now + 0.25);
+      }
+    }
+
+    // Audio Event Handlers
+    audio.addEventListener('loadedmetadata', () => {
+      durationEl.textContent = formatTime(audio.duration);
+    });
+
+    audio.addEventListener('timeupdate', () => {
+      if (audio.duration) {
+        const pct = (audio.currentTime / audio.duration) * 100;
+        progressFill.style.width = `${pct}%`;
+        currentTimeEl.textContent = formatTime(audio.currentTime);
+      }
+    });
+
+    audio.addEventListener('ended', () => {
+      playBtn.textContent = '▶';
+    });
+
+    function togglePlay() {
+      if (audio.paused) {
+        audio.play();
+        playBtn.textContent = '⏸';
+      } else {
+        audio.pause();
+        playBtn.textContent = '▶';
+      }
+    }
+
+    function seekRelative(seconds) {
+      audio.currentTime = Math.max(0, Math.min(audio.duration || 0, audio.currentTime + seconds));
+    }
+
+    function cycleSpeed() {
+      speedIndex = (speedIndex + 1) % speeds.length;
+      const spd = speeds[speedIndex];
+      audio.playbackRate = spd;
+      speedBtn.textContent = `${spd}x`;
+    }
+
+    function onProgressClick(e) {
+      const container = document.getElementById('progressContainer');
+      const rect = container.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const pct = clickX / rect.width;
+      audio.currentTime = pct * audio.duration;
+    }
+
+    function toggleTranscript() {
+      transcriptBox.classList.toggle('show');
+    }
+
+    function formatTime(secs) {
+      if (isNaN(secs)) return '0:00';
+      const m = Math.floor(secs / 60);
+      const s = Math.floor(secs % 60);
+      return `${m}:${String(s).padStart(2, '0')}`;
+    }
+
+    // --- Exercise 1 Data ---
+    const CHECKLIST_ITEMS = [
+      { id: 'c1', label: 'the area nearby', isAsked: true },
+      { id: 'c2', label: 'the cost of the flat', isAsked: true },
+      { id: 'c3', label: 'the furniture', isAsked: true },
+      { id: 'c4', label: 'the garden', isAsked: true },
+      { id: 'c5', label: 'the neighbours', isAsked: false }, // Cathy mentions neighbours, Mark doesn't ask about them
+      { id: 'c6', label: 'the parking', isAsked: false },
+      { id: 'c7', label: "what's in the bathroom?", isAsked: true }
+    ];
+
+    let selectedChecks = new Set();
+    let part1Completed = false;
+
+    function renderChecklist() {
+      const container = document.getElementById('checklistContainer');
+      container.innerHTML = '';
+
+      CHECKLIST_ITEMS.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'check-item';
+        div.id = `check-${item.id}`;
+        div.onclick = () => toggleCheck(item.id);
+
+        div.innerHTML = `
+          <div class="custom-checkbox">${selectedChecks.has(item.id) ? '✓' : ''}</div>
+          <div class="check-label">${item.label}</div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function toggleCheck(id) {
+      if (selectedChecks.has(id)) {
+        selectedChecks.delete(id);
+      } else {
+        selectedChecks.add(id);
+      }
+      renderChecklist();
+    }
+
+    function checkPart1() {
+      let correctAnswers = 0;
+      let totalAsked = CHECKLIST_ITEMS.filter(i => i.isAsked).length; // 5
+
+      CHECKLIST_ITEMS.forEach(item => {
+        const el = document.getElementById(`check-${item.id}`);
+        const isChecked = selectedChecks.has(item.id);
+
+        el.classList.remove('correct', 'wrong');
+
+        if (item.isAsked && isChecked) {
+          el.classList.add('correct');
+          correctAnswers++;
+        } else if (!item.isAsked && isChecked) {
+          el.classList.add('wrong');
+        } else if (item.isAsked && !isChecked) {
+          el.classList.add('wrong');
+        }
+      });
+
+      const p1ScoreEl = document.getElementById('p1Score');
+      p1ScoreEl.textContent = correctAnswers;
+
+      const fb = document.getElementById('p1Feedback');
+      if (correctAnswers === totalAsked && selectedChecks.size === totalAsked) {
+        fb.style.color = '#10b981';
+        fb.textContent = '✅ Perfect! You identified all 5 things Mark asks about!';
+        playBeep('correct');
+        part1Completed = true;
+      } else {
+        fb.style.color = '#ef4444';
+        fb.textContent = `Found ${correctAnswers} of 5 correct. Notice: Mark doesn't ask about neighbours or parking!`;
+        playBeep('wrong');
+      }
+
+      updateTotalScore();
+    }
+
+    function resetPart1() {
+      selectedChecks.clear();
+      part1Completed = false;
+      document.getElementById('p1Feedback').textContent = '';
+      document.getElementById('p1Score').textContent = '0';
+      renderChecklist();
+      updateTotalScore();
+    }
+
+    // --- Exercise 2 Data ---
+    const QA_DATA = [
+      {
+        id: 1,
+        question: 'How many rooms are there?',
+        validAnswers: [
+          '6', 'six', '6 rooms', 'six rooms',
+          'a hall, a living room, a kitchen, a bathroom and two bedrooms',
+          'hall, living room, kitchen, bathroom, two bedrooms',
+          'hall, living room, kitchen, bathroom and two bedrooms'
+        ],
+        hint: '6 rooms (a hall, a living room, a kitchen, a bathroom and two bedrooms)'
+      },
+      {
+        id: 2,
+        question: 'What furniture is in the living room?',
+        validAnswers: [
+          'a sofa, a dining table and chairs',
+          'a sofa, dining table and chairs',
+          'sofa, dining table and chairs',
+          'sofa, table and chairs',
+          'a sofa and dining table and chairs'
+        ],
+        hint: 'A sofa, (a) dining table and chairs'
+      },
+      {
+        id: 3,
+        question: "What's in the bathroom?",
+        validAnswers: [
+          'a shower and a bath',
+          'shower and a bath',
+          'a shower and bath',
+          'shower and bath',
+          'a bath and a shower'
+        ],
+        hint: 'A shower and a bath'
+      },
+      {
+        id: 4,
+        question: 'Has the flat got a garden?',
+        validAnswers: [
+          'yes', 'yes it has', 'yes, it has', 'yes, there is a garden',
+          'yes, there is a shared garden', 'yes (shared)', 'yes, a shared garden'
+        ],
+        hint: 'Yes (a shared garden for everyone in the building)'
+      },
+      {
+        id: 5,
+        question: 'How far is the supermarket?',
+        validAnswers: [
+          '5 minutes', 'five minutes', '5 minutes away', 'about 5 minutes away',
+          'about five minutes away', '5 mins', 'about 5 minutes'
+        ],
+        hint: 'About 5 minutes away'
+      },
+      {
+        id: 6,
+        question: 'How much is the flat per month?',
+        validAnswers: [
+          '£600', '600', '£600 per month', '600 pounds', '600 per month', '£ 600'
+        ],
+        hint: '£600 per month'
+      }
+    ];
+
+    let p2CorrectCount = 0;
+
+    function renderQA() {
+      const container = document.getElementById('qaList');
+      container.innerHTML = '';
+
+      QA_DATA.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'qa-row';
+        row.id = `qa-${item.id}`;
+
+        row.innerHTML = `
+          <div class="qa-header">
+            <div class="qa-num">${item.id}</div>
+            <div class="qa-question">${item.question}</div>
+          </div>
+          <div class="qa-input-wrapper">
+            <input 
+              type="text" 
+              class="qa-input" 
+              id="qaInput-${item.id}" 
+              placeholder="Type answer here..." 
+              autocomplete="off"
+              oninput="onQAInputLive(${item.id})"
+            />
+          </div>
+          <div class="qa-hint-text" id="qaHint-${item.id}">💡 Hint: ${item.hint}</div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function cleanString(str) {
+      return str.toLowerCase().replace(/[.,!?'"£]/g, '').trim().replace(/\s+/g, ' ');
+    }
+
+    function isAnswerValid(userInput, validList) {
+      const cleanUser = cleanString(userInput);
+      return validList.some(ans => {
+        const cleanAns = cleanString(ans);
+        return cleanUser === cleanAns || cleanUser.includes(cleanAns) || cleanAns.includes(cleanUser);
+      });
+    }
+
+    function onQAInputLive(id) {
+      const item = QA_DATA.find(d => d.id === id);
+      const input = document.getElementById(`qaInput-${id}`);
+      const row = document.getElementById(`qa-${id}`);
+      const val = input.value.trim();
+
+      if (val.length > 1 && isAnswerValid(val, item.validAnswers)) {
+        if (!input.classList.contains('correct')) {
+          input.classList.add('correct');
+          row.classList.add('correct');
+          row.classList.remove('incorrect');
+          playBeep('correct');
+          updateQAStats();
+        }
+      }
+    }
+
+    function checkPart2() {
+      let correct = 0;
+      QA_DATA.forEach(item => {
+        const input = document.getElementById(`qaInput-${item.id}`);
+        const row = document.getElementById(`qa-${item.id}`);
+        const val = input.value.trim();
+
+        if (val.length > 0 && isAnswerValid(val, item.validAnswers)) {
+          correct++;
+          input.classList.add('correct');
+          row.classList.add('correct');
+          row.classList.remove('incorrect');
+        } else {
+          row.classList.add('incorrect');
+          input.classList.remove('correct');
+        }
+      });
+
+      p2CorrectCount = correct;
+      updateQAStats();
+
+      const fb = document.getElementById('p2Feedback');
+      if (correct === QA_DATA.length) {
+        fb.style.color = '#10b981';
+        fb.textContent = '🎉 Excellent! All 6 listening comprehension questions answered correctly!';
+        playBeep('correct');
+        checkAllFinished();
+      } else {
+        fb.style.color = '#ef4444';
+        fb.textContent = `${correct} of ${QA_DATA.length} correct. Check the highlighted questions or use Hint!`;
+        playBeep('wrong');
+      }
+    }
+
+    function givePart2Hint() {
+      for (let i = 1; i <= QA_DATA.length; i++) {
+        const input = document.getElementById(`qaInput-${i}`);
+        const hintEl = document.getElementById(`qaHint-${i}`);
+        if (!input.classList.contains('correct') && !hintEl.classList.contains('show')) {
+          hintEl.classList.add('show');
+          return;
+        }
+      }
+    }
+
+    function resetPart2() {
+      QA_DATA.forEach(item => {
+        const input = document.getElementById(`qaInput-${item.id}`);
+        const row = document.getElementById(`qa-${item.id}`);
+        const hintEl = document.getElementById(`qaHint-${item.id}`);
+        input.value = '';
+        input.classList.remove('correct');
+        row.classList.remove('correct', 'incorrect');
+        hintEl.classList.remove('show');
+      });
+      p2CorrectCount = 0;
+      document.getElementById('p2Feedback').textContent = '';
+      updateQAStats();
+    }
+
+    function updateQAStats() {
+      const correct = document.querySelectorAll('.qa-input.correct').length;
+      p2CorrectCount = correct;
+      document.getElementById('p2Score').textContent = correct;
+      updateTotalScore();
+    }
+
+    function updateTotalScore() {
+      const p1 = parseInt(document.getElementById('p1Score').textContent) || 0;
+      const p2 = parseInt(document.getElementById('p2Score').textContent) || 0;
+      const totalScore = (p1 * 100) + (p2 * 100);
+      document.getElementById('score').textContent = totalScore;
+
+      if (p1 === 5 && p2 === 6) {
+        document.getElementById('finalScoreVal').textContent = totalScore;
+        document.getElementById('victoryOverlay').classList.add('show');
+      }
+    }
+
+    function closeVictory() {
+      document.getElementById('victoryOverlay').classList.remove('show');
+    }
+
+    // Init
+    window.addEventListener('DOMContentLoaded', () => {
+      renderChecklist();
+      renderQA();
+    });
+  </script>
+</body>
+</html>
