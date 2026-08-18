@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Part 3: Final Conversation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #4338ca;
+      --primary-hover: #3730a3;
+      --primary-soft: #e0e7ff;
+      --secondary: #0369a1;
+      --success: #15803d;
+      --success-soft: #dcfce7;
+      --danger: #b91c1c;
+      --danger-soft: #fee2e2;
+      --bg: #eef2f6;
+      --card-bg: #ffffff;
+      --card-border: #cbd5e1;
+      --text-main: #0f172a;
+      --text-sub: #334155;
+      --text-muted: #64748b;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --radius-sm: 6px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #eef2f6 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem 1rem 3.5rem;
+      line-height: 1.5;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      background: #ffffff;
+      padding: 5px;
+      border-radius: 9999px;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--text-sub);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 0.88rem;
+      padding: 7px 18px;
+      border-radius: 9999px;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-link:hover { color: var(--primary); background: var(--primary-soft); }
+    .nav-link.active {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(67, 56, 202, 0.25);
+    }
+
+    /* Header */
+    header { text-align: center; margin-bottom: 1.5rem; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      background: var(--primary-soft);
+      border: 1px solid #c7d2fe;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 0.35rem;
+      letter-spacing: -0.01em;
+    }
+    p.subtitle { color: var(--text-sub); font-size: 0.95rem; max-width: 600px; }
+
+    /* Score Bar */
+    .stats-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      width: 100%;
+      max-width: 1000px;
+    }
+    .stat-pill {
+      background: #ffffff;
+      border: 1px solid var(--card-border);
+      padding: 0.45rem 1.1rem;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-sub);
+      box-shadow: var(--shadow-sm);
+    }
+    .stat-pill span.value { color: var(--primary); font-family: 'Outfit', sans-serif; font-size: 1.05rem; font-weight: 700; }
+
+    /* Audio Player */
+    .player-card {
+      width: 100%;
+      max-width: 1000px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .player-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; }
+    .track-info { display: flex; align-items: center; gap: 10px; }
+    .track-icon {
+      background: var(--primary-soft); color: var(--primary); width: 36px; height: 36px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem;
+    }
+    .track-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--text-main); }
+    .player-controls { display: flex; align-items: center; gap: 0.5rem; }
+    .play-btn {
+      background: var(--primary); border: none; color: #ffffff; width: 40px; height: 40px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; cursor: pointer; transition: all 0.2s;
+    }
+    .play-btn:hover { background: var(--primary-hover); transform: scale(1.05); }
+    .seek-btn, .speed-btn {
+      background: #f1f5f9; border: 1px solid #cbd5e1;
+      color: var(--text-main); padding: 5px 10px; border-radius: var(--radius-sm);
+      font-size: 0.78rem; font-weight: 700; cursor: pointer;
+    }
+    .seek-btn:hover, .speed-btn:hover { background: #e2e8f0; }
+    .transcript-toggle-btn {
+      background: var(--primary-soft); border: 1px solid #c7d2fe;
+      color: var(--primary); padding: 5px 12px; border-radius: 9999px; font-size: 0.8rem;
+      font-weight: 700; cursor: pointer; transition: all 0.2s;
+    }
+    .transcript-toggle-btn:hover { background: #e0e7ff; }
+    .progress-wrapper { display: flex; align-items: center; gap: 10px; }
+    .time-label { font-family: 'Outfit', sans-serif; font-size: 0.8rem; color: var(--text-muted); min-width: 36px; text-align: center; }
+    .progress-bar-container { flex-grow: 1; height: 6px; background: #e2e8f0; border-radius: 9999px; cursor: pointer; }
+    .progress-bar-fill { height: 100%; width: 0%; background: var(--primary); border-radius: 9999px; }
+
+    .transcript-box {
+      display: none; background: #f8fafc; border: 1px solid var(--card-border);
+      border-radius: var(--radius-md); padding: 1rem; max-height: 180px; overflow-y: auto; font-size: 0.88rem; line-height: 1.6;
+    }
+    .transcript-box.show { display: block; }
+    .spk-a { color: var(--primary); font-weight: 700; }
+    .spk-b { color: var(--secondary); font-weight: 700; }
+
+    /* Layout Grid */
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 1.35rem;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-md);
+    }
+    .section-title { font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.2rem; }
+    .section-desc { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 1.15rem; }
+
+    /* Exercise 6a */
+    .situation-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-bottom: 1.25rem;
+    }
+    .situation-card {
+      background: #f8fafc;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: var(--text-main);
+    }
+    .situation-card:hover { background: var(--primary-soft); border-color: #c7d2fe; }
+    .situation-card.selected { background: var(--primary-soft); border-color: var(--primary); }
+    .situation-card.correct { background: var(--success-soft) !important; border-color: var(--success) !important; color: var(--success); }
+    .situation-card.wrong { background: var(--danger-soft) !important; border-color: var(--danger) !important; }
+    .radio-circle {
+      width: 20px; height: 20px; border-radius: 50%; border: 2px solid #cbd5e1;
+      display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;
+    }
+    .situation-card.selected .radio-circle { border-color: var(--primary); background: var(--primary); color: #ffffff; }
+
+    /* Table for 6b */
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      margin-bottom: 1.25rem;
+    }
+    table.lesson-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    table.lesson-table th {
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 2px solid #c7d2fe;
+    }
+    table.lesson-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--card-border);
+      vertical-align: middle;
+    }
+    table.lesson-table tr:hover { background: #f8fafc; }
+    .event-col { font-weight: 600; color: var(--text-main); width: 45%; }
+    .choice-col { text-align: center; width: 27.5%; }
+
+    .choice-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      border: 1.5px solid #cbd5e1;
+      background: #ffffff;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+    .choice-chip:hover { border-color: var(--primary); background: var(--primary-soft); }
+    .choice-chip.selected { background: var(--primary); border-color: var(--primary); color: #ffffff; }
+    .choice-chip.correct { background: var(--success) !important; border-color: var(--success) !important; color: #ffffff !important; }
+    .choice-chip.wrong { background: var(--danger) !important; border-color: var(--danger) !important; color: #ffffff !important; }
+    .choice-chip.locked { cursor: default; }
+
+    /* Buttons */
+    .btn {
+      padding: 0.65rem 1.1rem; border: none; border-radius: var(--radius-md); font-family: 'Outfit', sans-serif;
+      font-size: 0.88rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none;
+    }
+    .btn-primary { background: var(--primary); color: #ffffff; }
+    .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+    .btn-outline { background: #ffffff; border: 1px solid #cbd5e1; color: var(--text-sub); }
+    .btn-outline:hover { background: #f1f5f9; color: var(--text-main); }
+    .feedback-banner { min-height: 22px; font-size: 0.85rem; font-weight: 600; text-align: center; margin-top: 0.4rem; }
+
+    /* Victory Modal */
+    .victory-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7);
+      z-index: 99; flex-direction: column; align-items: center; justify-content: center;
+      padding: 1.5rem; backdrop-filter: blur(4px);
+    }
+    .victory-overlay.show { display: flex; }
+    .modal-box {
+      background: #ffffff; border-radius: var(--radius-lg); padding: 2rem;
+      max-width: 450px; width: 100%; text-align: center; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    .modal-box h2 { font-family: 'Outfit', sans-serif; font-size: 2rem; color: var(--primary); margin-bottom: 0.4rem; }
+
+    .page-footer-nav {
+      margin-top: 2rem; display: flex; justify-content: space-between; width: 100%; max-width: 1000px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <nav class="top-nav">
+    <a href="../index.html" class="nav-link">🏠 All Lessons</a>
+    <a href="index.html" class="nav-link">📷 Part 1: Events & Listening</a>
+    <a href="grammar.html" class="nav-link">✍️ Part 2: Practice & Grammar</a>
+    <a href="conversation.html" class="nav-link active">💬 Part 3: Final Conversation</a>
+  </nav>
+
+  <!-- Header -->
+  <header>
+    <div class="badge">Part 3</div>
+    <h1>Final Stage: Real Conversation</h1>
+    <p class="subtitle">Listen to two friends having coffee and determine what usually happens vs. what was in the past.</p>
+  </header>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="stat-pill">⭐ Total Score: <span class="value" id="scoreVal">0</span> / 700</div>
+    <div class="stat-pill">Exercise 6a: <span class="value" id="ex6aScore">0</span> / 1</div>
+    <div class="stat-pill">Exercise 6b (Chart): <span class="value" id="ex6bScore">1</span> / 6</div>
+  </div>
+
+  <!-- Audio Player (Recording 11) -->
+  <div class="player-card">
+    <div class="player-top">
+      <div class="track-info">
+        <div class="track-icon">🎧</div>
+        <div>
+          <div class="track-title">Listen: Café Conversation</div>
+        </div>
+      </div>
+      <div class="player-controls">
+        <button class="seek-btn" onclick="seekAudio(-5)">⏪ -5s</button>
+        <button class="play-btn" id="playBtn" onclick="toggleAudio()">▶</button>
+        <button class="seek-btn" onclick="seekAudio(5)">+5s ⏩</button>
+        <button class="speed-btn" id="speedBtn" onclick="cycleSpeed()">1.0x</button>
+        <button class="transcript-toggle-btn" onclick="toggleTranscript()">📜 Read Words</button>
+      </div>
+    </div>
+    <div class="progress-wrapper">
+      <span class="time-label" id="currentTime">0:00</span>
+      <div class="progress-bar-container" id="progressContainer" onclick="onProgressClick(event)">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+      <span class="time-label" id="duration">0:00</span>
+    </div>
+
+    <!-- Transcript Box -->
+    <div class="transcript-box" id="transcriptBox">
+      <p><span class="spk-a">A:</span> How was the work party yesterday?</p>
+      <p><span class="spk-b">B:</span> It was OK, but the weather was bad.</p>
+      <p><span class="spk-a">A:</span> Oh no, sorry about that.</p>
+      <p><span class="spk-b">B:</span> Meh, it’s OK. How was your family party at the weekend?</p>
+      <p><span class="spk-a">A:</span> Good. It was my dad’s birthday, and we usually go for a meal in a restaurant. This year the party was at home, so it wasn’t so expensive! Oh, how was the office meeting?</p>
+      <p><span class="spk-b">B:</span> Last week?</p>
+      <p><span class="spk-a">A:</span> Yes.</p>
+      <p><span class="spk-b">B:</span> It was OK. Tony doesn’t usually come to the meeting, but he was there last week.</p>
+      <p><span class="spk-a">A:</span> Oh, good. Would you like another coffee?</p>
+      <p><span class="spk-b">B:</span> No, I’m OK.</p>
+    </div>
+  </div>
+
+  <audio id="audioElement" src="RM_A1_SB_U7_R11.mp3" preload="metadata"></audio>
+
+  <!-- Container -->
+  <main class="grid-container">
+
+    <!-- Exercise 6a -->
+    <div class="card">
+      <div class="section-title">6a. Who is talking in the conversation?</div>
+      <div class="section-desc">Listen and pick the situation:</div>
+
+      <div class="situation-options">
+        <div class="situation-card" id="sitA" onclick="selectSituation('a')">
+          <div class="radio-circle">a</div>
+          <div>a mother and son talking at home</div>
+        </div>
+
+        <div class="situation-card" id="sitB" onclick="selectSituation('b')">
+          <div class="radio-circle">b</div>
+          <div>work friends talking in a café</div>
+        </div>
+      </div>
+
+      <div class="feedback-banner" id="ex6aFeedback"></div>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn btn-outline" style="flex: 1;" onclick="checkEx6a()">Check Answer</button>
+        <button class="btn btn-outline" onclick="resetEx6a()">Reset</button>
+      </div>
+    </div>
+
+    <!-- Exercise 6b -->
+    <div class="card">
+      <div class="section-title">6b. Complete the chart</div>
+      <div class="section-desc">Click the checkmark (✓) under <strong>Usually happens</strong> or <strong>Was in the past</strong>:</div>
+
+      <div class="table-wrapper">
+        <table class="lesson-table">
+          <thead>
+            <tr>
+              <th>Event</th>
+              <th class="choice-col">Usually happens</th>
+              <th class="choice-col">Was in the past</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr id="tblRow-1">
+              <td class="event-col">1. work party</td>
+              <td class="choice-col"><span class="choice-chip locked">—</span></td>
+              <td class="choice-col"><span class="choice-chip locked correct">✓</span></td>
+            </tr>
+
+            <tr id="tblRow-2">
+              <td class="event-col">2. bad weather</td>
+              <td class="choice-col">
+                <span class="choice-chip" id="chip-2-usually" onclick="selectTableRow(2, 'usually')"></span>
+              </td>
+              <td class="choice-col">
+                <span class="choice-chip" id="chip-2-past" onclick="selectTableRow(2, 'past')"></span>
+              </td>
+            </tr>
+
+            <tr id="tblRow-3">
+              <td class="event-col">3. birthday party in a restaurant</td>
+              <td class="choice-col">
+                <span class="choice-chip" id="chip-3-usually" onclick="selectTableRow(3, 'usually')"></span>
+              </td>
+              <td class="choice-col">
+                <span class="choice-chip" id="chip-3-past" onclick="selectTableRow(3, 'past')"></span>
+              </td>
+            </tr>
+
+            <tr id="tblRow-4">
+              <td class="event-col">4. birthday party at home</td>
+              <td class="choice-col">
+                <span class="choice-chip" id="chip-4-usually" onclick="selectTableRow(4, 'usually')"></span>
+              </td>
+              <td class="choice-col">
+                <span class="choice-chip" id="chip-4-past" onclick="selectTableRow(4, 'past')"></span>
+              </td>
+            </tr>
+
+            <tr id="tblRow-5">
+              <td class="event-col">5. office meeting</td>
+              <td class="choice-col">
+                <span class="choice-chip" id="chip-5-usually" onclick="selectTableRow(5, 'usually')"></span>
+              </td>
+              <td class="choice-col">
+                <span class="choice-chip" id="chip-5-past" onclick="selectTableRow(5, 'past')"></span>
+              </td>
+            </tr>
+
+            <tr id="tblRow-6">
+              <td class="event-col">6. Tony not at the meeting</td>
+              <td class="choice-col">
+                <span class="choice-chip" id="chip-6-usually" onclick="selectTableRow(6, 'usually')"></span>
+              </td>
+              <td class="choice-col">
+                <span class="choice-chip" id="chip-6-past" onclick="selectTableRow(6, 'past')"></span>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="feedback-banner" id="ex6bFeedback"></div>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn btn-primary" style="flex: 1;" onclick="checkEx6b()">Check Chart</button>
+        <button class="btn btn-outline" onclick="hintEx6b()">Help / Hint</button>
+        <button class="btn btn-outline" onclick="resetEx6b()">Reset</button>
+      </div>
+    </div>
+
+  </main>
+
+  <div class="page-footer-nav">
+    <a href="grammar.html" class="btn btn-outline">⬅️ Back to Part 2</a>
+    <a href="index.html" class="btn btn-primary">Start Over (Part 1) 🔄</a>
+  </div>
+
+  <!-- Victory Overlay -->
+  <div class="victory-overlay" id="victoryOverlay">
+    <div class="modal-box">
+      <h2>🎉 Great Job!</h2>
+      <p style="color: var(--text-sub); margin-bottom: 1.25rem;">You completed all activities across the lesson!</p>
+      <div style="font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-main);">
+        Final Score: <strong style="color: var(--primary);" id="finalScoreVal">700</strong> / 700
+      </div>
+      <div style="display: flex; gap: 10px; justify-content: center;">
+        <a href="index.html" class="btn btn-primary">Review from Part 1</a>
+        <button class="btn btn-outline" onclick="closeVictory()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const audio = document.getElementById('audioElement');
+    const playBtn = document.getElementById('playBtn');
+    const speedBtn = document.getElementById('speedBtn');
+    const progressFill = document.getElementById('progressFill');
+    const currentTimeEl = document.getElementById('currentTime');
+    const durationEl = document.getElementById('duration');
+    const transcriptBox = document.getElementById('transcriptBox');
+
+    const speeds = [1.0, 1.25, 0.8];
+    let speedIdx = 0;
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playBeep(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      if (type === 'correct') {
+        osc.frequency.setValueAtTime(523.25, now); osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.15);
+        gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+        osc.start(now); osc.stop(now + 0.3);
+      } else {
+        osc.type = 'sawtooth'; osc.frequency.setValueAtTime(220, now);
+        gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+        osc.start(now); osc.stop(now + 0.25);
+      }
+    }
+
+    audio.addEventListener('loadedmetadata', () => { durationEl.textContent = formatTime(audio.duration); });
+    audio.addEventListener('timeupdate', () => {
+      if (audio.duration) {
+        progressFill.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
+        currentTimeEl.textContent = formatTime(audio.currentTime);
+      }
+    });
+    audio.addEventListener('ended', () => { playBtn.textContent = '▶'; });
+
+    function toggleAudio() {
+      if (audio.paused) { audio.play(); playBtn.textContent = '⏸'; }
+      else { audio.pause(); playBtn.textContent = '▶'; }
+    }
+    function seekAudio(s) { audio.currentTime = Math.max(0, Math.min(audio.duration || 0, audio.currentTime + s)); }
+    function cycleSpeed() {
+      speedIdx = (speedIdx + 1) % speeds.length;
+      audio.playbackRate = speeds[speedIdx];
+      speedBtn.textContent = `${speeds[speedIdx]}x`;
+    }
+    function onProgressClick(e) {
+      const rect = document.getElementById('progressContainer').getBoundingClientRect();
+      audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+    }
+    function toggleTranscript() { transcriptBox.classList.toggle('show'); }
+    function formatTime(secs) {
+      if (isNaN(secs)) return '0:00';
+      const m = Math.floor(secs / 60); const s = Math.floor(secs % 60);
+      return `${m}:${String(s).padStart(2, '0')}`;
+    }
+
+    // Exercise 6a
+    let selectedSituation = null;
+
+    function selectSituation(opt) {
+      selectedSituation = opt;
+      document.getElementById('sitA').classList.toggle('selected', opt === 'a');
+      document.getElementById('sitB').classList.toggle('selected', opt === 'b');
+    }
+
+    function checkEx6a() {
+      const sitA = document.getElementById('sitA');
+      const sitB = document.getElementById('sitB');
+      sitA.classList.remove('correct', 'wrong');
+      sitB.classList.remove('correct', 'wrong');
+
+      const fb = document.getElementById('ex6aFeedback');
+      if (selectedSituation === 'b') {
+        sitB.classList.add('correct');
+        fb.style.color = '#15803d';
+        fb.textContent = '✅ Correct! They are work friends having coffee in a café ("Would you like another coffee?").';
+        document.getElementById('ex6aScore').textContent = '1';
+        playBeep('correct');
+      } else {
+        if (selectedSituation === 'a') sitA.classList.add('wrong');
+        sitB.classList.add('correct');
+        fb.style.color = '#b91c1c';
+        fb.textContent = 'Incorrect. Notice they ask: "Would you like another coffee?" and talk about work.';
+        document.getElementById('ex6aScore').textContent = '0';
+        playBeep('wrong');
+      }
+      updateTotal();
+    }
+
+    function resetEx6a() {
+      selectedSituation = null;
+      document.getElementById('sitA').classList.remove('selected', 'correct', 'wrong');
+      document.getElementById('sitB').classList.remove('selected', 'correct', 'wrong');
+      document.getElementById('ex6aScore').textContent = '0';
+      document.getElementById('ex6aFeedback').textContent = '';
+      updateTotal();
+    }
+
+    // Exercise 6b
+    const EX6B_KEY = { 2: 'past', 3: 'usually', 4: 'past', 5: 'usually', 6: 'usually' };
+    const tableUserChoices = {};
+
+    function selectTableRow(rowId, type) {
+      tableUserChoices[rowId] = type;
+      const chipUsually = document.getElementById(`chip-${rowId}-usually`);
+      const chipPast = document.getElementById(`chip-${rowId}-past`);
+
+      chipUsually.textContent = type === 'usually' ? '✓' : '';
+      chipPast.textContent = type === 'past' ? '✓' : '';
+
+      chipUsually.classList.toggle('selected', type === 'usually');
+      chipPast.classList.toggle('selected', type === 'past');
+    }
+
+    function checkEx6b() {
+      let correct = 1;
+
+      for (let r = 2; r <= 6; r++) {
+        const userChoice = tableUserChoices[r];
+        const chipUsually = document.getElementById(`chip-${r}-usually`);
+        const chipPast = document.getElementById(`chip-${r}-past`);
+
+        chipUsually.classList.remove('correct', 'wrong');
+        chipPast.classList.remove('correct', 'wrong');
+
+        if (userChoice === EX6B_KEY[r]) {
+          correct++;
+          if (userChoice === 'usually') chipUsually.classList.add('correct');
+          else chipPast.classList.add('correct');
+        } else {
+          if (userChoice === 'usually') chipUsually.classList.add('wrong');
+          else if (userChoice === 'past') chipPast.classList.add('wrong');
+        }
+      }
+
+      document.getElementById('ex6bScore').textContent = correct;
+      const fb = document.getElementById('ex6bFeedback');
+      if (correct === 6) {
+        fb.style.color = '#15803d';
+        fb.textContent = '🎉 Great job! All items correctly placed in the chart!';
+        playBeep('correct');
+        checkVictory();
+      } else {
+        fb.style.color = '#b91c1c';
+        fb.textContent = `${correct} of 6 correct. Listen for words like 'usually' vs 'was'.`;
+        playBeep('wrong');
+      }
+      updateTotal();
+    }
+
+    function hintEx6b() {
+      for (let r = 2; r <= 6; r++) {
+        if (tableUserChoices[r] !== EX6B_KEY[r]) {
+          selectTableRow(r, EX6B_KEY[r]);
+          checkEx6b();
+          return;
+        }
+      }
+    }
+
+    function resetEx6b() {
+      for (let r = 2; r <= 6; r++) {
+        delete tableUserChoices[r];
+        const chipUsually = document.getElementById(`chip-${r}-usually`);
+        const chipPast = document.getElementById(`chip-${r}-past`);
+        chipUsually.textContent = ''; chipPast.textContent = '';
+        chipUsually.classList.remove('selected', 'correct', 'wrong');
+        chipPast.classList.remove('selected', 'correct', 'wrong');
+      }
+      document.getElementById('ex6bScore').textContent = '1';
+      document.getElementById('ex6bFeedback').textContent = '';
+      updateTotal();
+    }
+
+    function updateTotal() {
+      const s6a = (parseInt(document.getElementById('ex6aScore').textContent) || 0) * 100;
+      const s6b = (parseInt(document.getElementById('ex6bScore').textContent) || 0) * 100;
+      document.getElementById('scoreVal').textContent = s6a + s6b;
+    }
+
+    function checkVictory() {
+      if (selectedSituation === 'b' && document.getElementById('ex6bScore').textContent === '6') {
+        document.getElementById('finalScoreVal').textContent = '700';
+        document.getElementById('victoryOverlay').classList.add('show');
+      }
+    }
+
+    function closeVictory() {
+      document.getElementById('victoryOverlay').classList.remove('show');
+    }
+  </script>
+</body>
+</html>

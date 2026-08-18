@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Part 1: Events & Listening</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #4338ca;
+      --primary-hover: #3730a3;
+      --primary-soft: #e0e7ff;
+      --secondary: #0369a1;
+      --success: #15803d;
+      --success-soft: #dcfce7;
+      --danger: #b91c1c;
+      --danger-soft: #fee2e2;
+      --bg: #eef2f6;
+      --card-bg: #ffffff;
+      --card-border: #cbd5e1;
+      --text-main: #0f172a;
+      --text-sub: #334155;
+      --text-muted: #64748b;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --radius-sm: 6px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #eef2f6 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem 1rem 3.5rem;
+      line-height: 1.5;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      background: #ffffff;
+      padding: 5px;
+      border-radius: 9999px;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--text-sub);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 0.88rem;
+      padding: 7px 18px;
+      border-radius: 9999px;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-link:hover { color: var(--primary); background: var(--primary-soft); }
+    .nav-link.active {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(67, 56, 202, 0.25);
+    }
+
+    /* Header */
+    header { text-align: center; margin-bottom: 1.5rem; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      background: var(--primary-soft);
+      border: 1px solid #c7d2fe;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 0.35rem;
+      letter-spacing: -0.01em;
+    }
+    p.subtitle { color: var(--text-sub); font-size: 0.95rem; max-width: 650px; }
+
+    /* Score Bar */
+    .stats-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      width: 100%;
+      max-width: 1000px;
+    }
+    .stat-pill {
+      background: #ffffff;
+      border: 1px solid var(--card-border);
+      padding: 0.45rem 1.1rem;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-sub);
+      box-shadow: var(--shadow-sm);
+    }
+    .stat-pill span.value { color: var(--primary); font-family: 'Outfit', sans-serif; font-size: 1.05rem; font-weight: 700; }
+
+    /* Audio Player */
+    .player-card {
+      width: 100%;
+      max-width: 1000px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .player-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; }
+    .track-info { display: flex; align-items: center; gap: 10px; }
+    .track-icon {
+      background: var(--primary-soft); color: var(--primary); width: 36px; height: 36px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem;
+    }
+    .track-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--text-main); }
+    .player-controls { display: flex; align-items: center; gap: 0.5rem; }
+    .play-btn {
+      background: var(--primary); border: none; color: #ffffff; width: 40px; height: 40px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; cursor: pointer; transition: all 0.2s;
+    }
+    .play-btn:hover { background: var(--primary-hover); transform: scale(1.05); }
+    .seek-btn, .speed-btn {
+      background: #f1f5f9; border: 1px solid #cbd5e1;
+      color: var(--text-main); padding: 5px 10px; border-radius: var(--radius-sm);
+      font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
+    }
+    .seek-btn:hover, .speed-btn:hover { background: #e2e8f0; }
+    .transcript-toggle-btn {
+      background: var(--primary-soft); border: 1px solid #c7d2fe;
+      color: var(--primary); padding: 5px 12px; border-radius: 9999px; font-size: 0.8rem;
+      font-weight: 700; cursor: pointer; transition: all 0.2s;
+    }
+    .transcript-toggle-btn:hover { background: #e0e7ff; }
+    .progress-wrapper { display: flex; align-items: center; gap: 10px; }
+    .time-label { font-family: 'Outfit', sans-serif; font-size: 0.8rem; color: var(--text-muted); min-width: 36px; text-align: center; }
+    .progress-bar-container { flex-grow: 1; height: 6px; background: #e2e8f0; border-radius: 9999px; cursor: pointer; }
+    .progress-bar-fill { height: 100%; width: 0%; background: var(--primary); border-radius: 9999px; }
+
+    .transcript-box {
+      display: none; background: #f8fafc; border: 1px solid var(--card-border);
+      border-radius: var(--radius-md); padding: 1rem; max-height: 170px; overflow-y: auto; font-size: 0.88rem; line-height: 1.6; color: var(--text-sub);
+    }
+    .transcript-box.show { display: block; }
+    .transcript-box p { margin-bottom: 0.4rem; }
+    .transcript-box strong { color: var(--text-main); }
+
+    /* Layout Stack */
+    .content-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .split-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 860px) { .split-grid { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 1.35rem;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-md);
+    }
+    .section-title { font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.2rem; }
+    .section-desc { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 1.15rem; }
+
+    /* Exercise 1: Photos Grid */
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.65rem;
+      margin-bottom: 1.25rem;
+    }
+    @media (max-width: 500px) { .photos-container { grid-template-columns: 1fr; } }
+
+    .photo-card {
+      background: #f8fafc;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .photo-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      display: block;
+    }
+    .photo-body {
+      padding: 0.6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+    .photo-label {
+      font-weight: 700;
+      color: var(--primary);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.85rem;
+    }
+    .photo-select {
+      width: 100%;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      color: var(--text-main);
+      padding: 5px 6px;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+    }
+    .photo-select.correct { border-color: var(--success); background: var(--success-soft); color: var(--success); }
+    .photo-select.wrong { border-color: var(--danger); background: var(--danger-soft); }
+
+    /* Exercise 2: Speakers */
+    .speakers-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .speaker-row {
+      background: #f8fafc;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 0.75rem 0.9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .speaker-row.correct { border-color: var(--success); background: var(--success-soft); }
+    .speaker-row.wrong { border-color: var(--danger); background: var(--danger-soft); }
+    .speaker-header { display: flex; align-items: center; justify-content: space-between; }
+    .speaker-badge {
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.8rem;
+      padding: 2px 8px;
+      border-radius: 9999px;
+    }
+    .options-group { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .opt-btn {
+      flex: 1;
+      min-width: 75px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      color: var(--text-sub);
+      padding: 6px 8px;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .opt-btn:hover { background: var(--primary-soft); border-color: #c7d2fe; color: var(--primary); }
+    .opt-btn.selected { background: var(--primary); border-color: var(--primary); color: #ffffff; }
+    .opt-btn.correct { background: var(--success) !important; border-color: var(--success) !important; color: #ffffff !important; }
+    .opt-btn.wrong { background: var(--danger) !important; border-color: var(--danger) !important; color: #ffffff !important; }
+
+    /* Grammar Guide Box */
+    .grammar-box {
+      background: #ffffff;
+      border: 1px solid #c7d2fe;
+      border-left: 5px solid var(--primary);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.4rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .grammar-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .grammar-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      font-size: 0.9rem;
+    }
+    @media (max-width: 680px) { .grammar-grid { grid-template-columns: 1fr; } }
+    .grammar-card {
+      background: #f8fafc;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1rem;
+    }
+    .grammar-card h4 {
+      font-family: 'Outfit', sans-serif;
+      color: var(--text-main);
+      font-size: 0.92rem;
+      margin-bottom: 0.4rem;
+    }
+    .grammar-card ul { padding-left: 1.2rem; }
+    .grammar-card li { margin-bottom: 0.3rem; color: var(--text-sub); }
+    .grammar-card strong { color: var(--text-main); }
+
+    /* Exercise 3: Past vs Present */
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .event-card {
+      background: #f8fafc;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .event-card.correct { border-color: var(--success); background: var(--success-soft); }
+    .event-card.wrong { border-color: var(--danger); background: var(--danger-soft); }
+    .event-label { font-weight: 700; font-size: 0.9rem; color: var(--text-main); }
+    .event-buttons { display: flex; gap: 6px; }
+    .tense-btn {
+      flex: 1; padding: 6px 8px; border-radius: var(--radius-sm); border: 1px solid #cbd5e1;
+      background: #ffffff; color: var(--text-sub); font-family: inherit; font-size: 0.82rem;
+      font-weight: 700; cursor: pointer; transition: all 0.2s;
+    }
+    .tense-btn:hover { background: var(--primary-soft); border-color: #c7d2fe; color: var(--primary); }
+    .tense-btn.selected { background: var(--primary); border-color: var(--primary); color: #ffffff; }
+    .tense-btn.correct { background: var(--success) !important; border-color: var(--success) !important; color: #ffffff !important; }
+    .tense-btn.wrong { background: var(--danger) !important; border-color: var(--danger) !important; color: #ffffff !important; }
+
+    /* Buttons */
+    .btn {
+      padding: 0.65rem 1.1rem;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+    }
+    .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+    .btn-outline {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      color: var(--text-sub);
+    }
+    .btn-outline:hover { background: #f1f5f9; color: var(--text-main); }
+    .feedback-banner { min-height: 22px; font-size: 0.85rem; font-weight: 600; text-align: center; margin-top: 0.4rem; }
+
+    .page-footer-nav {
+      margin-top: 2rem;
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+      max-width: 1000px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <nav class="top-nav">
+    <a href="../index.html" class="nav-link">🏠 All Lessons</a>
+    <a href="index.html" class="nav-link active">📷 Part 1: Events & Listening</a>
+    <a href="grammar.html" class="nav-link">✍️ Part 2: Practice & Grammar</a>
+    <a href="conversation.html" class="nav-link">💬 Part 3: Final Conversation</a>
+  </nav>
+
+  <!-- Header -->
+  <header>
+    <div class="badge">Part 1</div>
+    <h1>Events & Listening</h1>
+    <p class="subtitle">Match photos, listen to 4 speakers, and understand how to talk about the past vs. present.</p>
+  </header>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="stat-pill">⭐ Total Score: <span class="value" id="scoreVal">0</span> / 1100</div>
+    <div class="stat-pill">Ex 1: <span class="value" id="ex1Score">0</span> / 3</div>
+    <div class="stat-pill">Ex 2: <span class="value" id="ex2Score">0</span> / 4</div>
+    <div class="stat-pill">Ex 3: <span class="value" id="ex3Score">0</span> / 4</div>
+  </div>
+
+  <!-- Audio Player (Speakers 1 to 4) -->
+  <div class="player-card">
+    <div class="player-top">
+      <div class="track-info">
+        <div class="track-icon">🎧</div>
+        <div>
+          <div class="track-title">Listen: Speakers 1 to 4</div>
+        </div>
+      </div>
+      <div class="player-controls">
+        <button class="seek-btn" onclick="seekRelative(-5)">⏪ -5s</button>
+        <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+        <button class="seek-btn" onclick="seekRelative(5)">+5s ⏩</button>
+        <button class="speed-btn" id="speedBtn" onclick="cycleSpeed()">1.0x</button>
+        <button class="transcript-toggle-btn" onclick="toggleTranscript()">📜 Read Words</button>
+      </div>
+    </div>
+    <div class="progress-wrapper">
+      <span class="time-label" id="currentTime">0:00</span>
+      <div class="progress-bar-container" id="progressContainer" onclick="onProgressClick(event)">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+      <span class="time-label" id="duration">0:00</span>
+    </div>
+
+    <div class="transcript-box" id="transcriptBox">
+      <p><strong>Speaker 1:</strong> My husband was fifty last year. There was a big party at our house. His friends from work were there. It was really nice.</p>
+      <p><strong>Speaker 2:</strong> There was a family meal last week. It was really good. All the family were there. I was so happy.</p>
+      <p><strong>Speaker 3:</strong> There’s a meeting every week on Friday. It’s in the blue meeting room.</p>
+      <p><strong>Speaker 4:</strong> We usually have a small party at my parents’ house for my mum’s birthday.</p>
+    </div>
+  </div>
+
+  <audio id="audioElement" src="RM_A1_SB_U7_R9.mp3" preload="metadata"></audio>
+
+  <!-- Content Stack -->
+  <div class="content-stack">
+
+    <!-- Split Grid: Ex 1 & Ex 2 -->
+    <div class="split-grid">
+      
+      <!-- Exercise 1 -->
+      <div class="card">
+        <div class="section-title">1. Match photos A–C with words</div>
+        <div class="section-desc">Choose: <em>a meal | a meeting | a party</em></div>
+
+        <div class="photos-container">
+          
+          <div class="photo-card">
+            <img src="105_img_01.png" alt="Photo A" />
+            <div class="photo-body">
+              <div class="photo-label">Photo A</div>
+              <select class="photo-select" id="selectA" onchange="checkEx1Live()">
+                <option value="">Choose...</option>
+                <option value="a party">a party</option>
+                <option value="a meeting">a meeting</option>
+                <option value="a meal">a meal</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="photo-card">
+            <img src="105_img_02.png" alt="Photo B" />
+            <div class="photo-body">
+              <div class="photo-label">Photo B</div>
+              <select class="photo-select" id="selectB" onchange="checkEx1Live()">
+                <option value="">Choose...</option>
+                <option value="a party">a party</option>
+                <option value="a meeting">a meeting</option>
+                <option value="a meal">a meal</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="photo-card">
+            <img src="105_img_03.png" alt="Photo C" />
+            <div class="photo-body">
+              <div class="photo-label">Photo C</div>
+              <select class="photo-select" id="selectC" onchange="checkEx1Live()">
+                <option value="">Choose...</option>
+                <option value="a party">a party</option>
+                <option value="a meeting">a meeting</option>
+                <option value="a meal">a meal</option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="feedback-banner" id="ex1Feedback"></div>
+
+        <div style="display: flex; gap: 8px; margin-top: auto;">
+          <button class="btn btn-outline" style="flex: 1;" onclick="checkEx1()">Check Answers</button>
+          <button class="btn btn-outline" onclick="resetEx1()">Reset</button>
+        </div>
+      </div>
+
+      <!-- Exercise 2 -->
+      <div class="card">
+        <div class="section-title">2. What are they talking about?</div>
+        <div class="section-desc">Listen to speakers 1–4 and choose the event:</div>
+
+        <div class="speakers-list">
+          
+          <div class="speaker-row" id="row1">
+            <div class="speaker-header">
+              <div class="speaker-badge">Speaker 1</div>
+            </div>
+            <div class="options-group">
+              <button class="opt-btn" onclick="selectSpeakerOpt(1, 'a party', this)">a party</button>
+              <button class="opt-btn" onclick="selectSpeakerOpt(1, 'a meeting', this)">a meeting</button>
+              <button class="opt-btn" onclick="selectSpeakerOpt(1, 'a meal', this)">a meal</button>
+            </div>
+          </div>
+
+          <div class="speaker-row" id="row2">
+            <div class="speaker-header">
+              <div class="speaker-badge">Speaker 2</div>
+            </div>
+            <div class="options-group">
+              <button class="opt-btn" onclick="selectSpeakerOpt(2, 'a party', this)">a party</button>
+              <button class="opt-btn" onclick="selectSpeakerOpt(2, 'a meeting', this)">a meeting</button>
+              <button class="opt-btn" onclick="selectSpeakerOpt(2, 'a meal', this)">a meal</button>
+            </div>
+          </div>
+
+          <div class="speaker-row" id="row3">
+            <div class="speaker-header">
+              <div class="speaker-badge">Speaker 3</div>
+            </div>
+            <div class="options-group">
+              <button class="opt-btn" onclick="selectSpeakerOpt(3, 'a party', this)">a party</button>
+              <button class="opt-btn" onclick="selectSpeakerOpt(3, 'a meeting', this)">a meeting</button>
+              <button class="opt-btn" onclick="selectSpeakerOpt(3, 'a meal', this)">a meal</button>
+            </div>
+          </div>
+
+          <div class="speaker-row" id="row4">
+            <div class="speaker-header">
+              <div class="speaker-badge">Speaker 4</div>
+            </div>
+            <div class="options-group">
+              <button class="opt-btn" onclick="selectSpeakerOpt(4, 'a party', this)">a party</button>
+              <button class="opt-btn" onclick="selectSpeakerOpt(4, 'a meeting', this)">a meeting</button>
+              <button class="opt-btn" onclick="selectSpeakerOpt(4, 'a meal', this)">a meal</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="feedback-banner" id="ex2Feedback"></div>
+
+        <div style="display: flex; gap: 8px; margin-top: auto;">
+          <button class="btn btn-primary" style="flex: 1;" onclick="checkEx2()">Check Answers</button>
+          <button class="btn btn-outline" onclick="resetEx2()">Reset</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Grammar Guide Box (Moved to Page 1) -->
+    <div class="grammar-box">
+      <div class="grammar-title">💡 Quick Guide: Present vs. Past</div>
+      <div class="grammar-grid">
+        <div class="grammar-card">
+          <h4>1. Verbs (Verb *be*)</h4>
+          <ul>
+            <li><strong>Present:</strong> There <em>is</em> / There<em>'s</em> / He <em>is</em></li>
+            <li><strong>Past:</strong> There <em>was</em> / We <em>were</em> / He <em>was</em></li>
+          </ul>
+        </div>
+        <div class="grammar-card">
+          <h4>2. Time Words</h4>
+          <ul>
+            <li><strong>Present:</strong> every week / usually / every month / today</li>
+            <li><strong>Past:</strong> yesterday / last week / last month / last year</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Exercise 3 (Moved to Page 1) -->
+    <div class="card">
+      <div class="section-title">3. Are these events in the PAST or PRESENT?</div>
+      <div class="section-desc">Listen again to speakers 1–4 and choose whether each event happened in the past or happens regularly:</div>
+
+      <div class="events-grid">
+        <div class="event-card" id="ev1">
+          <div class="event-label">Speaker 1: Husband's 50th birthday</div>
+          <div class="event-buttons">
+            <button class="tense-btn" onclick="selectTense(1, 'PAST', this)">PAST</button>
+            <button class="tense-btn" onclick="selectTense(1, 'PRESENT', this)">PRESENT</button>
+          </div>
+        </div>
+
+        <div class="event-card" id="ev2">
+          <div class="event-label">Speaker 2: Family meal</div>
+          <div class="event-buttons">
+            <button class="tense-btn" onclick="selectTense(2, 'PAST', this)">PAST</button>
+            <button class="tense-btn" onclick="selectTense(2, 'PRESENT', this)">PRESENT</button>
+          </div>
+        </div>
+
+        <div class="event-card" id="ev3">
+          <div class="event-label">Speaker 3: Friday meeting</div>
+          <div class="event-buttons">
+            <button class="tense-btn" onclick="selectTense(3, 'PAST', this)">PAST</button>
+            <button class="tense-btn" onclick="selectTense(3, 'PRESENT', this)">PRESENT</button>
+          </div>
+        </div>
+
+        <div class="event-card" id="ev4">
+          <div class="event-label">Speaker 4: Mum's birthday party</div>
+          <div class="event-buttons">
+            <button class="tense-btn" onclick="selectTense(4, 'PAST', this)">PAST</button>
+            <button class="tense-btn" onclick="selectTense(4, 'PRESENT', this)">PRESENT</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="feedback-banner" id="ex3Feedback"></div>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn btn-outline" style="flex: 1;" onclick="checkEx3()">Check Exercise 3</button>
+        <button class="btn btn-outline" onclick="resetEx3()">Reset</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer-nav">
+    <a href="grammar.html" class="btn btn-primary">Go to Part 2: Practice & Grammar ➔</a>
+  </div>
+
+  <script>
+    const audio = document.getElementById('audioElement');
+    const playBtn = document.getElementById('playBtn');
+    const speedBtn = document.getElementById('speedBtn');
+    const progressFill = document.getElementById('progressFill');
+    const currentTimeEl = document.getElementById('currentTime');
+    const durationEl = document.getElementById('duration');
+    const transcriptBox = document.getElementById('transcriptBox');
+
+    const speeds = [1.0, 1.25, 0.8];
+    let speedIndex = 0;
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playBeep(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      if (type === 'correct') {
+        osc.frequency.setValueAtTime(523.25, now); osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.15);
+        gain.gain.setValueAtTime(0.15, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+        osc.start(now); osc.stop(now + 0.3);
+      } else {
+        osc.type = 'sawtooth'; osc.frequency.setValueAtTime(220, now);
+        gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+        osc.start(now); osc.stop(now + 0.25);
+      }
+    }
+
+    audio.addEventListener('loadedmetadata', () => { durationEl.textContent = formatTime(audio.duration); });
+    audio.addEventListener('timeupdate', () => {
+      if (audio.duration) {
+        progressFill.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
+        currentTimeEl.textContent = formatTime(audio.currentTime);
+      }
+    });
+    audio.addEventListener('ended', () => { playBtn.textContent = '▶'; });
+
+    function togglePlay() {
+      if (audio.paused) { audio.play(); playBtn.textContent = '⏸'; }
+      else { audio.pause(); playBtn.textContent = '▶'; }
+    }
+    function seekRelative(s) { audio.currentTime = Math.max(0, Math.min(audio.duration || 0, audio.currentTime + s)); }
+    function cycleSpeed() {
+      speedIndex = (speedIndex + 1) % speeds.length;
+      audio.playbackRate = speeds[speedIndex];
+      speedBtn.textContent = `${speeds[speedIndex]}x`;
+    }
+    function onProgressClick(e) {
+      const rect = document.getElementById('progressContainer').getBoundingClientRect();
+      audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+    }
+    function toggleTranscript() { transcriptBox.classList.toggle('show'); }
+    function formatTime(secs) {
+      if (isNaN(secs)) return '0:00';
+      const m = Math.floor(secs / 60); const s = Math.floor(secs % 60);
+      return `${m}:${String(s).padStart(2, '0')}`;
+    }
+
+    // Exercise 1
+    const EX1_KEY = { selectA: 'a party', selectB: 'a meeting', selectC: 'a meal' };
+
+    function checkEx1Live() {
+      let correct = 0;
+      Object.keys(EX1_KEY).forEach(id => {
+        const sel = document.getElementById(id);
+        if (sel.value === EX1_KEY[id]) {
+          sel.classList.add('correct'); sel.classList.remove('wrong');
+          correct++;
+        } else if (sel.value) {
+          sel.classList.remove('correct'); sel.classList.remove('wrong');
+        }
+      });
+      document.getElementById('ex1Score').textContent = correct;
+      updateTotal();
+    }
+
+    function checkEx1() {
+      let correct = 0;
+      Object.keys(EX1_KEY).forEach(id => {
+        const sel = document.getElementById(id);
+        if (sel.value === EX1_KEY[id]) {
+          sel.classList.add('correct'); sel.classList.remove('wrong');
+          correct++;
+        } else {
+          sel.classList.add('wrong'); sel.classList.remove('correct');
+        }
+      });
+      document.getElementById('ex1Score').textContent = correct;
+      const fb = document.getElementById('ex1Feedback');
+      if (correct === 3) {
+        fb.style.color = '#15803d'; fb.textContent = '✅ Great job! All photos matched correctly!';
+        playBeep('correct');
+      } else {
+        fb.style.color = '#b91c1c'; fb.textContent = `${correct} of 3 correct. Try again!`;
+        playBeep('wrong');
+      }
+      updateTotal();
+    }
+
+    function resetEx1() {
+      Object.keys(EX1_KEY).forEach(id => {
+        const sel = document.getElementById(id);
+        sel.value = ''; sel.classList.remove('correct', 'wrong');
+      });
+      document.getElementById('ex1Score').textContent = '0';
+      document.getElementById('ex1Feedback').textContent = '';
+      updateTotal();
+    }
+
+    // Exercise 2
+    const EX2_KEY = { 1: 'a party', 2: 'a meal', 3: 'a meeting', 4: 'a party' };
+    const ex2Selections = {};
+
+    function selectSpeakerOpt(speakerId, optionVal, btn) {
+      ex2Selections[speakerId] = optionVal;
+      const row = document.getElementById(`row${speakerId}`);
+      row.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    }
+
+    function checkEx2() {
+      let correct = 0;
+      for (let i = 1; i <= 4; i++) {
+        const row = document.getElementById(`row${i}`);
+        const userChoice = ex2Selections[i];
+        row.querySelectorAll('.opt-btn').forEach(btn => {
+          btn.classList.remove('correct', 'wrong');
+          if (btn.textContent.trim() === EX2_KEY[i]) {
+            if (userChoice === EX2_KEY[i]) btn.classList.add('correct');
+          } else if (userChoice && btn.textContent.trim() === userChoice) {
+            btn.classList.add('wrong');
+          }
+        });
+
+        if (userChoice === EX2_KEY[i]) {
+          row.classList.add('correct'); row.classList.remove('wrong');
+          correct++;
+        } else {
+          row.classList.add('wrong'); row.classList.remove('correct');
+        }
+      }
+
+      document.getElementById('ex2Score').textContent = correct;
+      const fb = document.getElementById('ex2Feedback');
+      if (correct === 4) {
+        fb.style.color = '#15803d'; fb.textContent = '✨ Excellent! All 4 speakers identified!';
+        playBeep('correct');
+      } else {
+        fb.style.color = '#b91c1c'; fb.textContent = `${correct} of 4 correct. Listen again!`;
+        playBeep('wrong');
+      }
+      updateTotal();
+    }
+
+    function resetEx2() {
+      for (let i = 1; i <= 4; i++) {
+        delete ex2Selections[i];
+        const row = document.getElementById(`row${i}`);
+        row.classList.remove('correct', 'wrong');
+        row.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected', 'correct', 'wrong'));
+      }
+      document.getElementById('ex2Score').textContent = '0';
+      document.getElementById('ex2Feedback').textContent = '';
+      updateTotal();
+    }
+
+    // Exercise 3
+    const EX3_KEY = { 1: 'PAST', 2: 'PAST', 3: 'PRESENT', 4: 'PRESENT' };
+    const ex3Choices = {};
+
+    function selectTense(id, val, btn) {
+      ex3Choices[id] = val;
+      const card = document.getElementById(`ev${id}`);
+      card.querySelectorAll('.tense-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    }
+
+    function checkEx3() {
+      let correct = 0;
+      for (let i = 1; i <= 4; i++) {
+        const card = document.getElementById(`ev${i}`);
+        const userChoice = ex3Choices[i];
+        card.querySelectorAll('.tense-btn').forEach(btn => {
+          btn.classList.remove('correct', 'wrong');
+          if (btn.textContent === EX3_KEY[i]) {
+            if (userChoice === EX3_KEY[i]) btn.classList.add('correct');
+          } else if (userChoice && btn.textContent === userChoice) {
+            btn.classList.add('wrong');
+          }
+        });
+
+        if (userChoice === EX3_KEY[i]) {
+          card.classList.add('correct'); card.classList.remove('wrong');
+          correct++;
+        } else {
+          card.classList.add('wrong'); card.classList.remove('correct');
+        }
+      }
+
+      document.getElementById('ex3Score').textContent = correct;
+      const fb = document.getElementById('ex3Feedback');
+      if (correct === 4) {
+        fb.style.color = '#15803d'; fb.textContent = '✅ Great! Events 1 & 2 are in the PAST; 3 & 4 are in the PRESENT!';
+        playBeep('correct');
+      } else {
+        fb.style.color = '#b91c1c'; fb.textContent = `${correct} of 4 correct. Try again!`;
+        playBeep('wrong');
+      }
+      updateTotal();
+    }
+
+    function resetEx3() {
+      for (let i = 1; i <= 4; i++) {
+        delete ex3Choices[i];
+        const card = document.getElementById(`ev${i}`);
+        card.classList.remove('correct', 'wrong');
+        card.querySelectorAll('.tense-btn').forEach(b => b.classList.remove('selected', 'correct', 'wrong'));
+      }
+      document.getElementById('ex3Score').textContent = '0';
+      document.getElementById('ex3Feedback').textContent = '';
+      updateTotal();
+    }
+
+    function updateTotal() {
+      const e1 = (parseInt(document.getElementById('ex1Score').textContent) || 0) * 100;
+      const e2 = (parseInt(document.getElementById('ex2Score').textContent) || 0) * 100;
+      const e3 = (parseInt(document.getElementById('ex3Score').textContent) || 0) * 100;
+      document.getElementById('scoreVal').textContent = e1 + e2 + e3;
+    }
+  </script>
+</body>
+</html>

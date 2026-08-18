@@ -3,93 +3,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>House Vocabulary Game</title>
+  <title>English Learning Hub - Interactive Lessons & Games</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --primary: #4f46e5;
-      --primary-hover: #4338ca;
-      --primary-light: #e0e7ff;
-      --secondary: #0ea5e9;
-      --success: #10b981;
-      --success-light: #d1fae5;
-      --danger: #ef4444;
-      --danger-light: #fee2e2;
-      --warning: #f59e0b;
-      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
-      --card-bg: rgba(255, 255, 255, 0.08);
-      --card-border: rgba(255, 255, 255, 0.12);
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --badge-bg: rgba(99, 102, 241, 0.2);
-      --radius-lg: 20px;
+      --primary: #4338ca;
+      --primary-hover: #3730a3;
+      --primary-soft: #e0e7ff;
+      --secondary: #0284c7;
+      --secondary-soft: #e0f2fe;
+      --success: #15803d;
+      --success-soft: #dcfce7;
+      --bg: #eef2f6;
+      --card-bg: #ffffff;
+      --card-border: #cbd5e1;
+      --text-main: #0f172a;
+      --text-sub: #334155;
+      --text-muted: #64748b;
+      --radius-lg: 18px;
       --radius-md: 12px;
       --radius-sm: 8px;
-      --shadow-glow: 0 10px 30px -10px rgba(79, 70, 229, 0.4);
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 6px 20px -3px rgba(15, 23, 42, 0.08);
+      --shadow-hover: 0 12px 28px -4px rgba(67, 56, 202, 0.15);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background: var(--bg-gradient);
+      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #eef2f6 100%);
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 1.25rem 1rem 3rem;
-      overflow-x: hidden;
-    }
-
-    /* Top Navigation Tabs */
-    .top-nav {
-      display: flex;
-      gap: 0.75rem;
-      margin-bottom: 1.25rem;
-      background: rgba(0, 0, 0, 0.35);
-      padding: 6px;
-      border-radius: 9999px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(12px);
-    }
-
-    .nav-link {
-      text-decoration: none;
-      color: var(--text-muted);
-      font-family: 'Outfit', sans-serif;
-      font-weight: 700;
-      font-size: 0.9rem;
-      padding: 8px 18px;
-      border-radius: 9999px;
-      transition: all 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .nav-link:hover {
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .nav-link.active {
-      background: #4f46e5;
-      color: #ffffff;
-      box-shadow: 0 2px 10px rgba(79, 70, 229, 0.5);
+      padding: 2rem 1rem 4rem;
+      line-height: 1.5;
     }
 
     /* Header */
     header {
       text-align: center;
-      margin-bottom: 1.25rem;
-      animation: fadeInDown 0.6s ease-out;
+      margin-bottom: 2.25rem;
+      max-width: 700px;
     }
 
     .badge {
@@ -97,1211 +56,286 @@
       align-items: center;
       gap: 6px;
       padding: 6px 14px;
-      background: var(--badge-bg);
-      border: 1px solid rgba(99, 102, 241, 0.3);
+      background: var(--primary-soft);
+      border: 1px solid #c7d2fe;
       border-radius: 9999px;
       font-size: 0.85rem;
-      font-weight: 600;
-      color: #a5b4fc;
-      margin-bottom: 0.5rem;
-      backdrop-filter: blur(8px);
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.6rem;
     }
 
     h1 {
       font-family: 'Outfit', sans-serif;
-      font-size: clamp(1.8rem, 4vw, 2.75rem);
+      font-size: clamp(2rem, 4vw, 2.75rem);
       font-weight: 800;
-      background: linear-gradient(to right, #ffffff, #c7d2fe, #38bdf8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--text-main);
+      margin-bottom: 0.4rem;
       letter-spacing: -0.02em;
-      margin-bottom: 0.3rem;
     }
 
     p.subtitle {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-      max-width: 600px;
+      color: var(--text-sub);
+      font-size: 1.05rem;
     }
 
-    /* Timer Difficulty Selector */
-    .time-selector-bar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 1rem;
-      background: rgba(0, 0, 0, 0.25);
-      padding: 4px 8px;
-      border-radius: 9999px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .time-selector-label {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      font-weight: 600;
-      padding-left: 8px;
-    }
-
-    .time-chip {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      padding: 4px 10px;
-      border-radius: 9999px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .time-chip:hover {
-      color: #ffffff;
-    }
-
-    .time-chip.active {
-      background: #4f46e5;
-      color: #ffffff;
-      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.5);
-    }
-
-    /* Stats Bar */
-    .stats-bar {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 1.25rem;
-      width: 100%;
-      max-width: 1100px;
-      animation: fadeIn 0.8s ease-out;
-    }
-
-    .stat-pill {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      backdrop-filter: blur(12px);
-      padding: 0.5rem 1.15rem;
-      border-radius: 9999px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-
-    .stat-pill span.value {
-      color: #38bdf8;
-      font-family: 'Outfit', sans-serif;
-      font-size: 1.1rem;
-    }
-
-    /* Countdown Timer Pill Styling */
-    .timer-pill {
-      background: rgba(14, 165, 233, 0.15);
-      border: 1.5px solid rgba(14, 165, 233, 0.4);
-      transition: all 0.3s ease;
-      position: relative;
-    }
-
-    .timer-pill.warning {
-      background: rgba(245, 158, 11, 0.2);
-      border-color: var(--warning);
-      color: #fde68a;
-    }
-
-    .timer-pill.warning .value {
-      color: #fbbf24 !important;
-    }
-
-    .timer-pill.critical {
-      background: rgba(239, 68, 68, 0.3);
-      border-color: var(--danger);
-      animation: timerPulse 0.8s infinite;
-    }
-
-    .timer-pill.critical .value {
-      color: #f87171 !important;
-    }
-
-    .time-bonus-badge {
-      position: absolute;
-      top: -12px;
-      right: -8px;
-      background: #10b981;
-      color: #ffffff;
-      font-size: 0.75rem;
-      font-weight: 800;
-      padding: 2px 6px;
-      border-radius: 9999px;
-      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.6);
-      animation: floatUp 0.8s ease-out forwards;
-      pointer-events: none;
-    }
-
-    /* Main Container */
-    .game-container {
+    /* Hub Grid */
+    .hub-container {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.75rem;
       width: 100%;
-      max-width: 1100px;
-      animation: fadeInUp 0.7s ease-out;
-      position: relative;
+      max-width: 1000px;
     }
 
-    @media (max-width: 860px) {
-      .game-container {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* Board Area */
-    .board-card {
+    /* Unit Card */
+    .unit-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: var(--radius-lg);
-      padding: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      backdrop-filter: blur(16px);
-      box-shadow: var(--shadow-glow);
-      position: relative;
-    }
-
-    .board-wrapper {
-      position: relative;
-      width: 100%;
-      max-width: 480px;
-      border-radius: var(--radius-md);
       overflow: hidden;
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
-    }
-
-    .board-image {
-      width: 100%;
-      height: auto;
-      display: block;
-      transition: transform 0.3s ease;
-    }
-
-    /* Interactive Overlay Hotspots on Image */
-    .hotspot {
-      position: absolute;
-      width: 32px;
-      height: 32px;
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      background: rgba(79, 70, 229, 0.88);
-      border: 2px solid #ffffff;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Outfit', sans-serif;
-      font-weight: 800;
-      font-size: 0.95rem;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-      z-index: 10;
-    }
-
-    .hotspot:hover {
-      transform: translate(-50%, -50%) scale(1.25);
-      background: #38bdf8;
-      box-shadow: 0 0 18px rgba(56, 189, 248, 0.8);
-    }
-
-    .hotspot.matched {
-      background: #10b981;
-      border-color: #a7f3d0;
-      cursor: default;
-    }
-
-    .hotspot.active {
-      background: #f59e0b;
-      transform: translate(-50%, -50%) scale(1.3);
-      animation: pulse 1.2s infinite;
-    }
-
-    /* Interactive Panel */
-    .interactive-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
       display: flex;
       flex-direction: column;
-      backdrop-filter: blur(16px);
-      box-shadow: var(--shadow-glow);
-      position: relative;
+      box-shadow: var(--shadow-md);
+      transition: all 0.25s ease;
     }
 
-    .tab-bar {
+    .unit-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: #a5b4fc;
+    }
+
+    .unit-banner {
+      padding: 1.5rem 1.5rem 1rem;
+      background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+      border-bottom: 1px solid var(--card-border);
       display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1.25rem;
-      background: rgba(0, 0, 0, 0.25);
-      padding: 4px;
-      border-radius: var(--radius-md);
+      align-items: flex-start;
+      gap: 12px;
     }
 
-    .tab-btn {
-      flex: 1;
-      padding: 8px 12px;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      font-family: 'Outfit', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 600;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .tab-btn.active {
+    .unit-icon {
       background: var(--primary);
       color: #ffffff;
-      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(67, 56, 202, 0.3);
     }
 
-    /* Question / Instruction Section */
-    .task-header {
-      margin-bottom: 1rem;
-    }
-
-    .task-title {
+    .unit-banner-text h2 {
       font-family: 'Outfit', sans-serif;
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 0.25rem;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 0.2rem;
     }
 
-    .task-desc {
+    .unit-banner-text p {
       font-size: 0.85rem;
-      color: var(--text-muted);
+      color: var(--text-sub);
     }
 
-    /* Match Mode: Vocabulary Grid */
-    .vocab-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 0.75rem;
-      margin-bottom: 1.5rem;
+    .unit-body {
+      padding: 1.25rem 1.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
       flex-grow: 1;
     }
 
-    .word-card {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+    .activity-link {
+      text-decoration: none;
+      background: #f8fafc;
+      border: 1px solid var(--card-border);
       border-radius: var(--radius-md);
-      padding: 0.75rem 0.6rem;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      font-weight: 600;
-      font-size: 0.9rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      user-select: none;
-    }
-
-    .word-card:hover:not(.disabled) {
-      background: rgba(79, 70, 229, 0.25);
-      border-color: #6366f1;
-      transform: translateY(-2px);
-    }
-
-    .word-card.selected {
-      background: #4f46e5;
-      border-color: #818cf8;
-      box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
-      transform: scale(1.03);
-    }
-
-    .word-card.matched {
-      background: rgba(16, 185, 129, 0.2);
-      border-color: var(--success);
-      color: #6ee7b7;
-      cursor: default;
-    }
-
-    .word-card.error {
-      animation: shake 0.4s ease;
-      background: rgba(239, 68, 68, 0.25);
-      border-color: var(--danger);
-    }
-
-    .word-card .letter-badge {
-      font-size: 0.75rem;
-      font-weight: 800;
-      background: rgba(255, 255, 255, 0.15);
-      padding: 2px 6px;
-      border-radius: 4px;
-      margin-bottom: 2px;
-    }
-
-    /* Quiz Mode Options */
-    .quiz-options {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .quiz-btn {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      padding: 0.9rem 1.2rem;
-      border-radius: var(--radius-md);
-      color: #ffffff;
-      font-family: inherit;
-      font-size: 1rem;
-      font-weight: 600;
-      text-align: left;
-      cursor: pointer;
-      transition: all 0.2s;
+      padding: 0.9rem 1rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 12px;
+      transition: all 0.2s ease;
     }
 
-    .quiz-btn:hover:not(:disabled) {
-      background: rgba(79, 70, 229, 0.25);
-      border-color: #6366f1;
+    .activity-link:hover {
+      background: var(--primary-soft);
+      border-color: #c7d2fe;
+      transform: translateX(4px);
     }
 
-    .quiz-btn.correct {
-      background: rgba(16, 185, 129, 0.3) !important;
-      border-color: var(--success) !important;
-    }
-
-    .quiz-btn.wrong {
-      background: rgba(239, 68, 68, 0.3) !important;
-      border-color: var(--danger) !important;
-    }
-
-    /* Audio Speaker Button */
-    .audio-btn {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      width: 44px;
-      height: 44px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: #38bdf8;
-      font-size: 1.2rem;
-      transition: all 0.2s;
-      margin-left: 8px;
-    }
-
-    .audio-btn:hover {
-      background: #38bdf8;
-      color: #0f172a;
-      transform: scale(1.1);
-    }
-
-    /* Action / Controls Bar */
-    .control-actions {
+    .activity-info {
       display: flex;
-      gap: 0.75rem;
-      margin-top: auto;
+      flex-direction: column;
+      gap: 2px;
     }
 
-    .btn {
-      flex: 1;
-      padding: 0.8rem 1.2rem;
-      border: none;
-      border-radius: var(--radius-md);
+    .activity-title {
       font-family: 'Outfit', sans-serif;
       font-size: 0.95rem;
       font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .activity-desc {
+      font-size: 0.82rem;
+      color: var(--text-sub);
+    }
+
+    .activity-arrow {
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 1.1rem;
+      transition: transform 0.2s;
+    }
+
+    .activity-link:hover .activity-arrow {
+      transform: translateX(3px);
+    }
+
+    /* Start Button */
+    .unit-cta {
+      margin-top: auto;
+      padding-top: 0.5rem;
+    }
+
+    .btn-main {
+      width: 100%;
+      text-decoration: none;
+      background: var(--primary);
+      color: #ffffff;
+      padding: 0.75rem 1.2rem;
+      border-radius: var(--radius-md);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
+      transition: all 0.2s;
     }
 
-    .btn-primary {
-      background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
-      color: #ffffff;
-      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+    .btn-main:hover {
+      background: var(--primary-hover);
     }
 
-    .btn-primary:hover {
-      filter: brightness(1.1);
-      transform: translateY(-2px);
-    }
-
-    .btn-outline {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #cbd5e1;
-    }
-
-    .btn-outline:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: #ffffff;
-    }
-
-    /* Feedback Banner */
-    .message-banner {
-      min-height: 28px;
-      font-size: 0.9rem;
-      font-weight: 600;
+    /* Footer */
+    footer {
+      margin-top: 3rem;
       text-align: center;
-      margin-top: 0.5rem;
-      transition: all 0.3s;
-    }
-
-    /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-16px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
-      50% { box-shadow: 0 0 0 12px rgba(245, 158, 11, 0); }
-    }
-    @keyframes timerPulse {
-      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
-      50% { transform: scale(1.05); box-shadow: 0 0 15px 4px rgba(239, 68, 68, 0.4); }
-    }
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      20%, 60% { transform: translateX(-6px); }
-      40%, 80% { transform: translateX(6px); }
-    }
-    @keyframes floatUp {
-      0% { opacity: 1; transform: translateY(0); }
-      100% { opacity: 0; transform: translateY(-20px); }
-    }
-
-    /* Overlay Card (Victory & Time's Up) */
-    .game-overlay {
-      display: none;
-      position: absolute;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.94);
-      border-radius: var(--radius-lg);
-      z-index: 50;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      text-align: center;
-      backdrop-filter: blur(12px);
-      animation: fadeIn 0.4s ease;
-    }
-
-    .game-overlay.show {
-      display: flex;
-    }
-
-    .game-overlay h2 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 2.2rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .game-overlay.win h2 {
-      color: #38bdf8;
-    }
-
-    .game-overlay.lose h2 {
-      color: #f87171;
+      font-size: 0.85rem;
+      color: var(--text-muted);
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Navigation Tabs -->
-  <nav class="top-nav">
-    <a href="index.html" class="nav-link active">🧩 Game 1: Vocab Match</a>
-    <a href="sentences.html" class="nav-link">✍️ Game 2: Sentence Builder</a>
-    <a href="listening.html" class="nav-link">🎧 Game 3: Listening Challenge</a>
-  </nav>
-
   <!-- Header -->
   <header>
-    <div class="badge">🏡 English Learning Interactive</div>
-    <h1>House Vocabulary Game</h1>
-    <p class="subtitle">Beat the countdown clock! Match letters A–K with the correct house vocabulary words.</p>
+    <div class="badge">✨ Interactive English Portal</div>
+    <h1>English Learning Hub</h1>
+    <p class="subtitle">Select a unit below to start interactive vocabulary games, grammar practice, and listening challenges.</p>
   </header>
 
-  <!-- Countdown Difficulty Selector -->
-  <div class="time-selector-bar">
-    <span class="time-selector-label">⏱️ Time Limit:</span>
-    <button class="time-chip" onclick="setTimeLimit(30)" id="chip30">⚡ 30s Blitz</button>
-    <button class="time-chip active" onclick="setTimeLimit(60)" id="chip60">⏱️ 60s Standard</button>
-    <button class="time-chip" onclick="setTimeLimit(90)" id="chip90">🧘 90s Relaxed</button>
-  </div>
+  <!-- Units Hub Grid -->
+  <main class="hub-container">
 
-  <!-- Statistics -->
-  <div class="stats-bar">
-    <div class="stat-pill timer-pill" id="timerPill">
-      ⏳ <span id="timerLabel">Time Left:</span>
-      <span class="value" id="countdown">60s</span>
-    </div>
-    <div class="stat-pill">⭐ Score: <span class="value" id="score">0</span></div>
-    <div class="stat-pill">🎯 Matches: <span class="value" id="matchedCount">0</span> / 11</div>
-    <div class="stat-pill">🔥 Streak: <span class="value" id="streak">0</span></div>
-  </div>
-
-  <!-- Game Arena -->
-  <main class="game-container">
-    
-    <!-- Left: House Plan Board Image -->
-    <div class="board-card">
-      <div class="board-wrapper" id="boardWrapper">
-        <img src="house_plan.png" alt="House Plan" class="board-image" id="boardImg" />
-        
-        <!-- Hotspots placed relative to the house layout -->
-        <div class="hotspot" style="top: 11%; left: 3.5%;" data-letter="A" title="Letter A">A</div>
-        <div class="hotspot" style="top: 15%; left: 30.5%;" data-letter="B" title="Letter B">B</div>
-        <div class="hotspot" style="top: 13%; left: 53.5%;" data-letter="C" title="Letter C">C</div>
-        <div class="hotspot" style="top: 11.5%; left: 64.5%;" data-letter="D" title="Letter D">D</div>
-        <div class="hotspot" style="top: 20%; left: 72%;" data-letter="E" title="Letter E">E</div>
-        <div class="hotspot" style="top: 46%; left: 3.5%;" data-letter="F" title="Letter F">F</div>
-        <div class="hotspot" style="top: 47%; left: 12%;" data-letter="G" title="Letter G">G</div>
-        <div class="hotspot" style="top: 47%; left: 26%;" data-letter="H" title="Letter H">H</div>
-        <div class="hotspot" style="top: 66.5%; left: 38.5%;" data-letter="I" title="Letter I">I</div>
-        <div class="hotspot" style="top: 63.5%; left: 81%;" data-letter="J" title="Letter J">J</div>
-        <div class="hotspot" style="top: 82%; left: 47%;" data-letter="K" title="Letter K">K</div>
-      </div>
-    </div>
-
-    <!-- Right: Interactive Panel -->
-    <div class="interactive-card">
-      
-      <!-- Mode Tabs -->
-      <div class="tab-bar">
-        <button class="tab-btn active" id="tabMatch" onclick="switchMode('match')">🧩 Match Mode</button>
-        <button class="tab-btn" id="tabQuiz" onclick="switchMode('quiz')">❓ Quiz Mode</button>
-        <button class="tab-btn" id="tabListen" onclick="switchMode('listen')">🔊 Listen & Find</button>
-      </div>
-
-      <!-- Mode 1: Match Words -->
-      <div id="matchSection">
-        <div class="task-header">
-          <div class="task-title" id="matchInstruction">Select a letter on the house or a word below</div>
-          <div class="task-desc">Correct matches add +3 bonus seconds to your timer!</div>
-        </div>
-
-        <div class="vocab-grid" id="vocabGrid">
-          <!-- Populated by JavaScript -->
+    <!-- Unit 4: House & Home -->
+    <div class="unit-card">
+      <div class="unit-banner">
+        <div class="unit-icon">🏡</div>
+        <div class="unit-banner-text">
+          <h2>Unit 4: House & Vocabulary</h2>
+          <p>Rooms, furniture, and describing a flat</p>
         </div>
       </div>
 
-      <!-- Mode 2: Quiz -->
-      <div id="quizSection" style="display: none;">
-        <div class="task-header">
-          <div style="display: flex; align-items: center; justify-content: space-between;">
-            <div class="task-title" id="quizQuestion">Question 1 of 11</div>
-            <button class="audio-btn" id="quizAudioBtn" onclick="speakCurrentWord()" title="Listen to pronunciation">🔊</button>
+      <div class="unit-body">
+        <a href="house-game/index.html" class="activity-link">
+          <div class="activity-info">
+            <div class="activity-title">🧩 Game 1: Vocab Match</div>
+            <div class="activity-desc">Interactive house plan matching with countdown timer</div>
           </div>
-          <div class="task-desc" id="quizPrompt">Identify the item corresponding to letter A:</div>
-        </div>
+          <div class="activity-arrow">➔</div>
+        </a>
 
-        <div class="quiz-options" id="quizOptions">
-          <!-- Quiz options generated here -->
-        </div>
-      </div>
-
-      <!-- Mode 3: Listen & Find -->
-      <div id="listenSection" style="display: none;">
-        <div class="task-header">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <div class="task-title">Listen & Click the House!</div>
-            <button class="audio-btn" onclick="playTargetWordAudio()" title="Replay word">🔊</button>
+        <a href="house-game/sentences.html" class="activity-link">
+          <div class="activity-info">
+            <div class="activity-title">✍️ Game 2: Sentence Builder</div>
+            <div class="activity-desc">Fill in the missing house words with word bank & audio</div>
           </div>
-          <div class="task-desc" id="listenPrompt">Press play and click the matching letter on the house image.</div>
+          <div class="activity-arrow">➔</div>
+        </a>
+
+        <a href="house-game/listening.html" class="activity-link">
+          <div class="activity-info">
+            <div class="activity-title">🎧 Game 3: Listening Challenge</div>
+            <div class="activity-desc">Listen to Mark call an estate agent about a flat</div>
+          </div>
+          <div class="activity-arrow">➔</div>
+        </a>
+
+        <div class="unit-cta">
+          <a href="house-game/index.html" class="btn-main">Start Unit 4 Activities 🚀</a>
         </div>
-        <div style="margin: 2rem 0; text-align: center;">
-          <button class="btn btn-primary" style="margin: 0 auto; max-width: 200px;" onclick="playTargetWordAudio()">
-            🔊 Play Audio Word
-          </button>
+      </div>
+    </div>
+
+    <!-- Unit 7: There was / were -->
+    <div class="unit-card">
+      <div class="unit-banner">
+        <div class="unit-icon">⏱️</div>
+        <div class="unit-banner-text">
+          <h2>Unit 7: Events & Past Tense</h2>
+          <p>Talking about gatherings with <em>there was / were</em></p>
         </div>
       </div>
 
-      <!-- Feedback Banner -->
-      <div class="message-banner" id="messageBanner"></div>
+      <div class="unit-body">
+        <a href="there-was-were/index.html" class="activity-link">
+          <div class="activity-info">
+            <div class="activity-title">📷 Part 1: Events & Listening</div>
+            <div class="activity-desc">Photo matching, 4 speakers, and past vs. present guide</div>
+          </div>
+          <div class="activity-arrow">➔</div>
+        </a>
 
-      <!-- Controls -->
-      <div class="control-actions">
-        <button class="btn btn-outline" onclick="hintLetter()">💡 Hint (-3s)</button>
-        <button class="btn btn-primary" onclick="restartGame()">🔄 Restart</button>
+        <a href="there-was-were/grammar.html" class="activity-link">
+          <div class="activity-info">
+            <div class="activity-title">✍️ Part 2: Practice & Grammar</div>
+            <div class="activity-desc">Classify verbs vs. time words & fill in sentences with audio</div>
+          </div>
+          <div class="activity-arrow">➔</div>
+        </a>
+
+        <a href="there-was-were/conversation.html" class="activity-link">
+          <div class="activity-info">
+            <div class="activity-title">💬 Part 3: Final Conversation</div>
+            <div class="activity-desc">Café coffee talk & complete the usually vs. past chart</div>
+          </div>
+          <div class="activity-arrow">➔</div>
+        </a>
+
+        <div class="unit-cta">
+          <a href="there-was-were/index.html" class="btn-main">Start Unit 7 Activities 🚀</a>
+        </div>
       </div>
-
-      <!-- Victory Overlay -->
-      <div class="game-overlay win" id="winnerOverlay">
-        <h2>🎉 Outstanding!</h2>
-        <p style="margin-bottom: 1.25rem; color: #cbd5e1;">You mastered all the vocabulary before time expired!</p>
-        <div style="font-size: 1.05rem; margin-bottom: 0.5rem;">
-          Base Score: <strong style="color: #ffffff;" id="baseScore">0</strong>
-        </div>
-        <div style="font-size: 1.05rem; margin-bottom: 0.5rem; color: #10b981;">
-          ⚡ Time Bonus: <strong id="timeBonus">+0</strong>
-        </div>
-        <div style="font-size: 1.3rem; margin-bottom: 1.5rem;">
-          Final Score: <strong style="color: #38bdf8;" id="finalScore">0</strong>
-        </div>
-        <button class="btn btn-primary" style="max-width: 220px;" onclick="restartGame()">Play Again</button>
-      </div>
-
-      <!-- Time's Up Overlay -->
-      <div class="game-overlay lose" id="timesUpOverlay">
-        <h2>⏰ Time's Up!</h2>
-        <p style="margin-bottom: 1.25rem; color: #cbd5e1;">The clock ran out before all rooms were identified.</p>
-        <div style="font-size: 1.1rem; margin-bottom: 1.5rem;">
-          You completed <strong style="color: #f59e0b;" id="lostCompletedCount">0</strong> of 11 items!
-        </div>
-        <button class="btn btn-primary" style="max-width: 220px;" onclick="restartGame()">Try Again ⚡</button>
-      </div>
-
     </div>
 
   </main>
 
-  <script>
-    // Vocabulary Data matching the house plan
-    const VOCAB_DATA = [
-      { letter: 'A', word: 'Upstairs', category: 'Floor', hint: 'The top level of the house' },
-      { letter: 'B', word: 'Wardrobe', category: 'Bedroom', hint: 'Tall cupboard where clothes are hung' },
-      { letter: 'C', word: 'Curtains', category: 'Bedroom', hint: 'Fabric hung over the bedroom window' },
-      { letter: 'D', word: 'Shower', category: 'Bathroom', hint: 'Water spray in the bathroom' },
-      { letter: 'E', word: 'Bathtub', category: 'Bathroom', hint: 'Large tub filled with water for washing' },
-      { letter: 'F', word: 'Downstairs', category: 'Floor', hint: 'The ground level of the house' },
-      { letter: 'G', word: 'Cupboard', category: 'Kitchen', hint: 'Cabinet storing dishes and cups' },
-      { letter: 'H', word: 'Fridge', category: 'Kitchen', hint: 'Cold appliance for keeping food fresh' },
-      { letter: 'I', word: 'Dining table', category: 'Dining area', hint: 'Table and floor area downstairs' },
-      { letter: 'J', word: 'Garage', category: 'Storage', hint: 'Room with roller door for boxes and car' },
-      { letter: 'K', word: 'Garden', category: 'Outdoor', hint: 'Lawn and yard outside the house' }
-    ];
+  <footer>
+    <p>English Interactive Activities • Created for Student Practice</p>
+  </footer>
 
-    let currentMode = 'match';
-    let selectedLetter = null;
-    let selectedWord = null;
-    let matchedLetters = new Set();
-    let score = 0;
-    let streak = 0;
-
-    // Countdown Timer State
-    let selectedTimeLimit = 60; // default 60s
-    let timeRemaining = 60;
-    let timerInterval = null;
-    let isGameOver = false;
-
-    // Quiz State
-    let quizIndex = 0;
-    let quizQuestions = [];
-
-    // Listen State
-    let listenTarget = null;
-
-    // Sound Synthesizer (Web Audio API)
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-    function playSound(type) {
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-      const now = audioCtx.currentTime;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-
-      if (type === 'success') {
-        osc.frequency.setValueAtTime(523.25, now); // C5
-        osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.15); // G5
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-        osc.start(now);
-        osc.stop(now + 0.3);
-      } else if (type === 'error') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(220, now);
-        osc.frequency.linearRampToValueAtTime(130, now + 0.2);
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
-        osc.start(now);
-        osc.stop(now + 0.25);
-      } else if (type === 'tick') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(800, now);
-        gain.gain.setValueAtTime(0.08, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-        osc.start(now);
-        osc.stop(now + 0.05);
-      } else if (type === 'buzzer') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(150, now);
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
-        osc.start(now);
-        osc.stop(now + 0.6);
-      } else if (type === 'win') {
-        [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
-          const noteOsc = audioCtx.createOscillator();
-          const noteGain = audioCtx.createGain();
-          noteOsc.connect(noteGain);
-          noteGain.connect(audioCtx.destination);
-          noteOsc.frequency.setValueAtTime(freq, now + i * 0.1);
-          noteGain.gain.setValueAtTime(0.2, now + i * 0.1);
-          noteGain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.1 + 0.25);
-          noteOsc.start(now + i * 0.1);
-          noteOsc.stop(now + i * 0.1 + 0.25);
-        });
-      }
-    }
-
-    // Text to Speech
-    function speakText(text) {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = 0.95;
-        utterance.lang = 'en-US';
-        window.speechSynthesis.speak(utterance);
-      }
-    }
-
-    // Time Limit Selector
-    function setTimeLimit(seconds) {
-      selectedTimeLimit = seconds;
-      document.querySelectorAll('.time-chip').forEach(c => c.classList.remove('active'));
-      const chip = document.getElementById(`chip${seconds}`);
-      if (chip) chip.classList.add('active');
-      restartGame();
-    }
-
-    // Initialize Game
-    function init() {
-      isGameOver = false;
-      startCountdown();
-      renderVocabGrid();
-      setupHotspots();
-      updateStats();
-    }
-
-    // Countdown Timer Logic
-    function startCountdown() {
-      clearInterval(timerInterval);
-      timeRemaining = selectedTimeLimit;
-      renderCountdownDisplay();
-
-      timerInterval = setInterval(() => {
-        if (isGameOver) return;
-        timeRemaining--;
-
-        if (timeRemaining <= 10 && timeRemaining > 0) {
-          playSound('tick');
-        }
-
-        if (timeRemaining <= 0) {
-          timeRemaining = 0;
-          renderCountdownDisplay();
-          onTimesUp();
-          return;
-        }
-
-        renderCountdownDisplay();
-      }, 1000);
-    }
-
-    function renderCountdownDisplay() {
-      const countdownEl = document.getElementById('countdown');
-      const pill = document.getElementById('timerPill');
-
-      const mins = Math.floor(timeRemaining / 60);
-      const secs = timeRemaining % 60;
-      countdownEl.textContent = mins > 0 
-        ? `${mins}:${String(secs).padStart(2, '0')}` 
-        : `${secs}s`;
-
-      pill.classList.remove('warning', 'critical');
-      if (timeRemaining <= 10) {
-        pill.classList.add('critical');
-      } else if (timeRemaining <= 20) {
-        pill.classList.add('warning');
-      }
-    }
-
-    function addTimeBonus(seconds) {
-      timeRemaining += seconds;
-      renderCountdownDisplay();
-
-      const pill = document.getElementById('timerPill');
-      const badge = document.createElement('div');
-      badge.className = 'time-bonus-badge';
-      badge.textContent = `+${seconds}s`;
-      pill.appendChild(badge);
-      setTimeout(() => badge.remove(), 800);
-    }
-
-    // Render Vocab Grid
-    function renderVocabGrid() {
-      const grid = document.getElementById('vocabGrid');
-      grid.innerHTML = '';
-
-      const shuffled = [...VOCAB_DATA].sort(() => Math.random() - 0.5);
-
-      shuffled.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'word-card';
-        card.dataset.word = item.word;
-        card.dataset.letter = item.letter;
-        card.innerHTML = `<span>${item.word}</span>`;
-        
-        card.addEventListener('click', () => onWordClick(card, item));
-        grid.appendChild(card);
-      });
-    }
-
-    // Setup Hotspots
-    function setupHotspots() {
-      document.querySelectorAll('.hotspot').forEach(spot => {
-        spot.addEventListener('click', () => {
-          if (isGameOver) return;
-          const letter = spot.dataset.letter;
-          onHotspotClick(spot, letter);
-        });
-      });
-    }
-
-    // Click Hotspot on image
-    function onHotspotClick(spot, letter) {
-      if (matchedLetters.has(letter)) return;
-
-      if (currentMode === 'listen') {
-        checkListenAnswer(letter);
-        return;
-      }
-
-      if (currentMode === 'match') {
-        selectedLetter = letter;
-        document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active'));
-        spot.classList.add('active');
-
-        if (selectedWord) {
-          evaluateMatch();
-        } else {
-          showBanner(`Selected Letter ${letter}. Now select the matching word!`, '#38bdf8');
-        }
-      }
-    }
-
-    // Click Word Card
-    function onWordClick(card, item) {
-      if (isGameOver || matchedLetters.has(item.letter)) return;
-
-      selectedWord = item.word;
-      document.querySelectorAll('.word-card').forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
-
-      speakText(item.word);
-
-      if (selectedLetter) {
-        evaluateMatch();
-      } else {
-        showBanner(`Selected "${item.word}". Now click its letter on the house!`, '#38bdf8');
-      }
-    }
-
-    // Evaluate Match
-    function evaluateMatch() {
-      const item = VOCAB_DATA.find(d => d.letter === selectedLetter);
-      const isCorrect = item && item.word.toLowerCase() === selectedWord.toLowerCase();
-
-      const hotspot = document.querySelector(`.hotspot[data-letter="${selectedLetter}"]`);
-      const wordCard = document.querySelector(`.word-card[data-word="${selectedWord}"]`);
-
-      if (isCorrect) {
-        matchedLetters.add(selectedLetter);
-        score += 100 + (streak * 25);
-        streak++;
-        playSound('success');
-        addTimeBonus(3); // +3s bonus reward!
-
-        hotspot.classList.remove('active');
-        hotspot.classList.add('matched');
-
-        if (wordCard) {
-          wordCard.classList.remove('selected');
-          wordCard.classList.add('matched');
-          wordCard.innerHTML = `<span class="letter-badge">${selectedLetter}</span><span>${selectedWord}</span>`;
-        }
-
-        showBanner(`✅ Correct! ${selectedLetter} = ${selectedWord} (+3s bonus!)`, '#10b981');
-
-        if (matchedLetters.size === VOCAB_DATA.length) {
-          onGameWon();
-        }
-      } else {
-        streak = 0;
-        playSound('error');
-        if (wordCard) {
-          wordCard.classList.add('error');
-          setTimeout(() => wordCard.classList.remove('error'), 500);
-        }
-        showBanner(`❌ Not quite! Keep racing against the clock!`, '#ef4444');
-      }
-
-      selectedLetter = null;
-      selectedWord = null;
-      document.querySelectorAll('.hotspot').forEach(h => {
-        if (!matchedLetters.has(h.dataset.letter)) h.classList.remove('active');
-      });
-      document.querySelectorAll('.word-card').forEach(c => {
-        if (!matchedLetters.has(c.dataset.letter)) c.classList.remove('selected');
-      });
-
-      updateStats();
-    }
-
-    // Quiz Mode Logic
-    function startQuizMode() {
-      quizIndex = 0;
-      quizQuestions = [...VOCAB_DATA].sort(() => Math.random() - 0.5);
-      renderQuizQuestion();
-    }
-
-    function renderQuizQuestion() {
-      if (quizIndex >= quizQuestions.length) {
-        onGameWon();
-        return;
-      }
-
-      const q = quizQuestions[quizIndex];
-      document.getElementById('quizQuestion').textContent = `Question ${quizIndex + 1} of ${quizQuestions.length}`;
-      document.getElementById('quizPrompt').textContent = `What is letter ${q.letter} on the house?`;
-
-      // Highlight target hotspot
-      document.querySelectorAll('.hotspot').forEach(h => {
-        h.classList.remove('active');
-        if (h.dataset.letter === q.letter) {
-          h.classList.add('active');
-        }
-      });
-
-      // Generate 4 options
-      const options = [q.word];
-      const others = VOCAB_DATA.filter(v => v.letter !== q.letter).map(v => v.word).sort(() => Math.random() - 0.5);
-      options.push(others[0], others[1], others[2]);
-      options.sort(() => Math.random() - 0.5);
-
-      const container = document.getElementById('quizOptions');
-      container.innerHTML = '';
-
-      options.forEach(opt => {
-        const btn = document.createElement('button');
-        btn.className = 'quiz-btn';
-        btn.innerHTML = `<span>${opt}</span> <span>👉</span>`;
-        btn.onclick = () => onQuizSelect(btn, opt, q.word);
-        container.appendChild(btn);
-      });
-    }
-
-    function onQuizSelect(btn, chosen, correct) {
-      if (isGameOver) return;
-      const allBtns = document.querySelectorAll('.quiz-btn');
-      allBtns.forEach(b => b.disabled = true);
-
-      if (chosen === correct) {
-        btn.classList.add('correct');
-        playSound('success');
-        score += 120 + (streak * 25);
-        streak++;
-        addTimeBonus(3);
-        showBanner(`✨ Correct! (+3s bonus!)`, '#10b981');
-      } else {
-        btn.classList.add('wrong');
-        streak = 0;
-        playSound('error');
-        allBtns.forEach(b => {
-          if (b.innerText.includes(correct)) b.classList.add('correct');
-        });
-        showBanner(`Incorrect. The answer is ${correct}.`, '#ef4444');
-      }
-
-      updateStats();
-      setTimeout(() => {
-        if (!isGameOver) {
-          quizIndex++;
-          renderQuizQuestion();
-        }
-      }, 1100);
-    }
-
-    function speakCurrentWord() {
-      if (quizQuestions[quizIndex]) {
-        speakText(quizQuestions[quizIndex].word);
-      }
-    }
-
-    // Listen & Find Mode
-    function startListenMode() {
-      const remaining = VOCAB_DATA.filter(v => !matchedLetters.has(v.letter));
-      if (remaining.length === 0) {
-        onGameWon();
-        return;
-      }
-      listenTarget = remaining[Math.floor(Math.random() * remaining.length)];
-      showBanner('🔊 Click "Play Audio Word" then choose the letter!', '#38bdf8');
-      playTargetWordAudio();
-    }
-
-    function playTargetWordAudio() {
-      if (listenTarget) {
-        speakText(listenTarget.word);
-      }
-    }
-
-    function checkListenAnswer(letter) {
-      if (isGameOver) return;
-      if (letter === listenTarget.letter) {
-        matchedLetters.add(letter);
-        score += 150;
-        streak++;
-        playSound('success');
-        addTimeBonus(3);
-        showBanner(`🎯 Great job! ${listenTarget.word} = ${letter} (+3s bonus!)`, '#10b981');
-
-        const spot = document.querySelector(`.hotspot[data-letter="${letter}"]`);
-        if (spot) spot.classList.add('matched');
-
-        updateStats();
-
-        if (matchedLetters.size === VOCAB_DATA.length) {
-          onGameWon();
-        } else {
-          setTimeout(() => {
-            if (!isGameOver) startListenMode();
-          }, 1100);
-        }
-      } else {
-        playSound('error');
-        showBanner(`❌ Try listening again!`, '#ef4444');
-      }
-    }
-
-    // Mode Switcher
-    function switchMode(mode) {
-      currentMode = mode;
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('matchSection').style.display = 'none';
-      document.getElementById('quizSection').style.display = 'none';
-      document.getElementById('listenSection').style.display = 'none';
-
-      if (mode === 'match') {
-        document.getElementById('tabMatch').classList.add('active');
-        document.getElementById('matchSection').style.display = 'block';
-      } else if (mode === 'quiz') {
-        document.getElementById('tabQuiz').classList.add('active');
-        document.getElementById('quizSection').style.display = 'block';
-        startQuizMode();
-      } else if (mode === 'listen') {
-        document.getElementById('tabListen').classList.add('active');
-        document.getElementById('listenSection').style.display = 'block';
-        startListenMode();
-      }
-    }
-
-    // Hint
-    function hintLetter() {
-      if (isGameOver) return;
-      const unmatched = VOCAB_DATA.filter(v => !matchedLetters.has(v.letter));
-      if (unmatched.length === 0) return;
-      const target = unmatched[0];
-      
-      // Cost 3 seconds penalty for a hint
-      timeRemaining = Math.max(1, timeRemaining - 3);
-      renderCountdownDisplay();
-
-      showBanner(`💡 Hint for ${target.letter} (-3s): "${target.hint}"`, '#f59e0b');
-      speakText(target.hint);
-    }
-
-    // Stats & Feedback
-    function updateStats() {
-      document.getElementById('score').textContent = score;
-      document.getElementById('matchedCount').textContent = matchedLetters.size;
-      document.getElementById('streak').textContent = streak;
-    }
-
-    function showBanner(text, color = '#ffffff') {
-      const banner = document.getElementById('messageBanner');
-      banner.style.color = color;
-      banner.textContent = text;
-    }
-
-    function onGameWon() {
-      isGameOver = true;
-      playSound('win');
-      clearInterval(timerInterval);
-
-      const timeBonus = timeRemaining * 15;
-      const finalScore = score + timeBonus;
-
-      document.getElementById('baseScore').textContent = score;
-      document.getElementById('timeBonus').textContent = `+${timeBonus} (${timeRemaining}s left × 15)`;
-      document.getElementById('finalScore').textContent = finalScore;
-      document.getElementById('winnerOverlay').classList.add('show');
-    }
-
-    function onTimesUp() {
-      isGameOver = true;
-      playSound('buzzer');
-      clearInterval(timerInterval);
-
-      document.getElementById('lostCompletedCount').textContent = matchedLetters.size;
-      document.getElementById('timesUpOverlay').classList.add('show');
-      showBanner('⏰ Time is up!', '#ef4444');
-    }
-
-    function restartGame() {
-      matchedLetters.clear();
-      selectedLetter = null;
-      selectedWord = null;
-      score = 0;
-      streak = 0;
-      isGameOver = false;
-      document.getElementById('winnerOverlay').classList.remove('show');
-      document.getElementById('timesUpOverlay').classList.remove('show');
-      document.querySelectorAll('.hotspot').forEach(h => {
-        h.className = 'hotspot';
-      });
-      init();
-      if (currentMode === 'quiz') startQuizMode();
-      if (currentMode === 'listen') startListenMode();
-      showBanner('Game started! Beat the countdown!', '#38bdf8');
-    }
-
-    // Start on load
-    window.addEventListener('DOMContentLoaded', init);
-  </script>
 </body>
 </html>

@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Part 2: Practice & Grammar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #4338ca;
+      --primary-hover: #3730a3;
+      --primary-soft: #e0e7ff;
+      --secondary: #0369a1;
+      --success: #15803d;
+      --success-soft: #dcfce7;
+      --danger: #b91c1c;
+      --danger-soft: #fee2e2;
+      --bg: #eef2f6;
+      --card-bg: #ffffff;
+      --card-border: #cbd5e1;
+      --text-main: #0f172a;
+      --text-sub: #334155;
+      --text-muted: #64748b;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --radius-sm: 6px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #eef2f6 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem 1rem 3.5rem;
+      line-height: 1.5;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      background: #ffffff;
+      padding: 5px;
+      border-radius: 9999px;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--text-sub);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 0.88rem;
+      padding: 7px 18px;
+      border-radius: 9999px;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-link:hover { color: var(--primary); background: var(--primary-soft); }
+    .nav-link.active {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(67, 56, 202, 0.25);
+    }
+
+    /* Header */
+    header { text-align: center; margin-bottom: 1.5rem; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      background: var(--primary-soft);
+      border: 1px solid #c7d2fe;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 0.35rem;
+      letter-spacing: -0.01em;
+    }
+    p.subtitle { color: var(--text-sub); font-size: 0.95rem; max-width: 650px; }
+
+    /* Score Bar */
+    .stats-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      width: 100%;
+      max-width: 1000px;
+    }
+    .stat-pill {
+      background: #ffffff;
+      border: 1px solid var(--card-border);
+      padding: 0.45rem 1.1rem;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-sub);
+      box-shadow: var(--shadow-sm);
+    }
+    .stat-pill span.value { color: var(--primary); font-family: 'Outfit', sans-serif; font-size: 1.05rem; font-weight: 700; }
+
+    /* Audio Player */
+    .player-card {
+      width: 100%;
+      max-width: 1000px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .player-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; }
+    .track-info { display: flex; align-items: center; gap: 10px; }
+    .track-icon {
+      background: var(--primary-soft); color: var(--primary); width: 36px; height: 36px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem;
+    }
+    .track-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--text-main); }
+    .player-controls { display: flex; align-items: center; gap: 0.5rem; }
+    .play-btn {
+      background: var(--primary); border: none; color: #ffffff; width: 40px; height: 40px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; cursor: pointer; transition: all 0.2s;
+    }
+    .play-btn:hover { background: var(--primary-hover); transform: scale(1.05); }
+    .seek-btn, .speed-btn {
+      background: #f1f5f9; border: 1px solid #cbd5e1;
+      color: var(--text-main); padding: 5px 10px; border-radius: var(--radius-sm);
+      font-size: 0.78rem; font-weight: 700; cursor: pointer;
+    }
+    .progress-wrapper { display: flex; align-items: center; gap: 10px; }
+    .time-label { font-family: 'Outfit', sans-serif; font-size: 0.8rem; color: var(--text-muted); min-width: 36px; text-align: center; }
+    .progress-bar-container { flex-grow: 1; height: 6px; background: #e2e8f0; border-radius: 9999px; cursor: pointer; }
+    .progress-bar-fill { height: 100%; width: 0%; background: var(--primary); border-radius: 9999px; }
+
+    /* Exercise Cards */
+    .exercises-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 1000px;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 1.35rem;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-md);
+    }
+    .section-title { font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.2rem; }
+    .section-desc { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 1.15rem; }
+
+    /* Sentence Rows */
+    .sentences-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .sentence-row {
+      background: #f8fafc;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 0.75rem 0.9rem;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    .sentence-row.correct { border-color: var(--success); background: var(--success-soft); }
+    .sentence-row.wrong { border-color: var(--danger); background: var(--danger-soft); }
+    .row-num {
+      background: var(--primary-soft); color: var(--primary); font-weight: 800; font-size: 0.78rem;
+      width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+    }
+    .type-select {
+      background: #ffffff; border: 1.5px solid #cbd5e1;
+      color: var(--primary); font-family: inherit; font-weight: 700; font-size: 0.82rem;
+      padding: 3px 6px; border-radius: var(--radius-sm); outline: none; cursor: pointer;
+    }
+    .fill-input {
+      background: #ffffff; border: 1.5px dashed #818cf8;
+      color: var(--text-main); font-family: inherit; font-weight: 600; font-size: 0.88rem;
+      padding: 3px 8px; border-radius: var(--radius-sm); outline: none; width: 110px; text-align: center;
+    }
+    .fill-input:focus { border: 1.5px solid var(--primary); }
+    .fill-input.correct { border: 1.5px solid var(--success); background: var(--success-soft); color: var(--success); }
+
+    /* Buttons */
+    .btn {
+      padding: 0.65rem 1.1rem; border: none; border-radius: var(--radius-md); font-family: 'Outfit', sans-serif;
+      font-size: 0.88rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none;
+    }
+    .btn-primary { background: var(--primary); color: #ffffff; }
+    .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+    .btn-outline { background: #ffffff; border: 1px solid #cbd5e1; color: var(--text-sub); }
+    .btn-outline:hover { background: #f1f5f9; color: var(--text-main); }
+    .feedback-banner { min-height: 22px; font-size: 0.85rem; font-weight: 600; text-align: center; margin-top: 0.4rem; }
+
+    .page-footer-nav {
+      margin-top: 2rem; display: flex; justify-content: space-between; width: 100%; max-width: 1000px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <nav class="top-nav">
+    <a href="../index.html" class="nav-link">🏠 All Lessons</a>
+    <a href="index.html" class="nav-link">📷 Part 1: Events & Listening</a>
+    <a href="grammar.html" class="nav-link active">✍️ Part 2: Practice & Grammar</a>
+    <a href="conversation.html" class="nav-link">💬 Part 3: Final Conversation</a>
+  </nav>
+
+  <!-- Header -->
+  <header>
+    <div class="badge">Part 2</div>
+    <h1>Grammar & Sentence Practice</h1>
+    <p class="subtitle">Practice classifying verbs vs. time words and listen to fill in missing parts of each sentence.</p>
+  </header>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="stat-pill">⭐ Total Score: <span class="value" id="totalScore">0</span> / 1600</div>
+    <div class="stat-pill">Exercise 4 (B or T): <span class="value" id="ex4Score">0</span> / 8</div>
+    <div class="stat-pill">Exercise 5 (Fill): <span class="value" id="ex5Score">0</span> / 8</div>
+  </div>
+
+  <!-- Audio Player (Recording 10) -->
+  <div class="player-card">
+    <div class="player-top">
+      <div class="track-info">
+        <div class="track-icon">🎧</div>
+        <div>
+          <div class="track-title">Listen: Sentences 1 to 8</div>
+        </div>
+      </div>
+      <div class="player-controls">
+        <button class="seek-btn" onclick="seekAudio(-5)">⏪ -5s</button>
+        <button class="play-btn" id="playBtn" onclick="toggleAudio()">▶</button>
+        <button class="seek-btn" onclick="seekAudio(5)">+5s ⏩</button>
+        <button class="speed-btn" id="speedBtn" onclick="cycleSpeed()">1.0x</button>
+      </div>
+    </div>
+    <div class="progress-wrapper">
+      <span class="time-label" id="currentTime">0:00</span>
+      <div class="progress-bar-container" id="progressContainer" onclick="onProgressClick(event)">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+      <span class="time-label" id="duration">0:00</span>
+    </div>
+  </div>
+
+  <audio id="audioElement" src="RM_A1_SB_U7_R10.mp3" preload="metadata"></audio>
+
+  <!-- Exercises Stack -->
+  <div class="exercises-stack">
+
+    <!-- Exercise 4 -->
+    <div class="card">
+      <div class="section-title">4. Choose the word type: Verb (B) or Time word (T)</div>
+      <div class="section-desc">Select <strong>[B] Verb be</strong> or <strong>[T] Time word</strong> for each gap:</div>
+
+      <div class="sentences-list" id="ex4List"></div>
+
+      <div class="feedback-banner" id="ex4Feedback"></div>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn btn-outline" style="flex: 1;" onclick="checkEx4()">Check Answers</button>
+        <button class="btn btn-outline" onclick="resetEx4()">Reset</button>
+      </div>
+    </div>
+
+    <!-- Exercise 5 -->
+    <div class="card">
+      <div class="section-title">5. Listen and type the missing words</div>
+      <div class="section-desc">Listen to the audio above and complete each sentence:</div>
+
+      <div class="sentences-list" id="ex5List"></div>
+
+      <div class="feedback-banner" id="ex5Feedback"></div>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn btn-primary" style="flex: 1;" onclick="checkEx5()">Check Answers</button>
+        <button class="btn btn-outline" onclick="hintEx5()">Help / Hint</button>
+        <button class="btn btn-outline" onclick="resetEx5()">Reset</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer-nav">
+    <a href="index.html" class="btn btn-outline">⬅️ Back to Part 1</a>
+    <a href="conversation.html" class="btn btn-primary">Go to Part 3: Final Conversation ➔</a>
+  </div>
+
+  <script>
+    // Audio Player
+    const audio = document.getElementById('audioElement');
+    const playBtn = document.getElementById('playBtn');
+    const speedBtn = document.getElementById('speedBtn');
+    const progressFill = document.getElementById('progressFill');
+    const currentTimeEl = document.getElementById('currentTime');
+    const durationEl = document.getElementById('duration');
+
+    const speeds = [1.0, 1.25, 0.8];
+    let speedIdx = 0;
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playBeep(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      if (type === 'correct') {
+        osc.frequency.setValueAtTime(523.25, now); osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.15);
+        gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+        osc.start(now); osc.stop(now + 0.3);
+      } else {
+        osc.type = 'sawtooth'; osc.frequency.setValueAtTime(220, now);
+        gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+        osc.start(now); osc.stop(now + 0.25);
+      }
+    }
+
+    audio.addEventListener('loadedmetadata', () => { durationEl.textContent = formatTime(audio.duration); });
+    audio.addEventListener('timeupdate', () => {
+      if (audio.duration) {
+        progressFill.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
+        currentTimeEl.textContent = formatTime(audio.currentTime);
+      }
+    });
+    audio.addEventListener('ended', () => { playBtn.textContent = '▶'; });
+
+    function toggleAudio() {
+      if (audio.paused) { audio.play(); playBtn.textContent = '⏸'; }
+      else { audio.pause(); playBtn.textContent = '▶'; }
+    }
+    function seekAudio(s) { audio.currentTime = Math.max(0, Math.min(audio.duration || 0, audio.currentTime + s)); }
+    function cycleSpeed() {
+      speedIdx = (speedIdx + 1) % speeds.length;
+      audio.playbackRate = speeds[speedIdx];
+      speedBtn.textContent = `${speeds[speedIdx]}x`;
+    }
+    function onProgressClick(e) {
+      const rect = document.getElementById('progressContainer').getBoundingClientRect();
+      audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+    }
+    function formatTime(secs) {
+      if (isNaN(secs)) return '0:00';
+      const m = Math.floor(secs / 60); const s = Math.floor(secs % 60);
+      return `${m}:${String(s).padStart(2, '0')}`;
+    }
+
+    // Exercise 4 Data
+    const EX4_DATA = [
+      { id: 1, text: 'There {gap1} a family lunch {gap2}.', g1: 'B', g2: 'T' },
+      { id: 2, text: '{gap1}, there {gap2} a big meeting in the office.', g1: 'T', g2: 'B' },
+      { id: 3, text: '{gap1} there a party in the office {gap2}?', g1: 'B', g2: 'T' },
+      { id: 4, text: 'There {gap1} a street party in my town {gap2}.', g1: 'B', g2: 'T' },
+      { id: 5, text: '{gap1} there a meeting {gap2}?', g1: 'B', g2: 'T' },
+      { id: 6, text: 'There {gap1} a birthday party for John {gap2}.', g1: 'B', g2: 'T' },
+      { id: 7, text: '{gap1}, I {gap2} at a meeting with Tanya.', g1: 'T', g2: 'B' },
+      { id: 8, text: "Sophie's birthday {gap1} in March. There's {gap2} a big party.", g1: 'B', g2: 'T' }
+    ];
+
+    function renderEx4() {
+      const container = document.getElementById('ex4List');
+      container.innerHTML = '';
+      EX4_DATA.forEach(row => {
+        const div = document.createElement('div');
+        div.className = 'sentence-row';
+        div.id = `ex4-row-${row.id}`;
+
+        let html = `<span class="row-num">${row.id}</span>`;
+        let replaced = row.text
+          .replace('{gap1}', `<select class="type-select" id="ex4-g1-${row.id}"><option value="">?</option><option value="B">B (Verb)</option><option value="T">T (Time)</option></select>`)
+          .replace('{gap2}', `<select class="type-select" id="ex4-g2-${row.id}"><option value="">?</option><option value="B">B (Verb)</option><option value="T">T (Time)</option></select>`);
+
+        div.innerHTML = html + replaced;
+        container.appendChild(div);
+      });
+    }
+
+    function checkEx4() {
+      let correct = 0;
+      EX4_DATA.forEach(row => {
+        const s1 = document.getElementById(`ex4-g1-${row.id}`);
+        const s2 = document.getElementById(`ex4-g2-${row.id}`);
+        const rEl = document.getElementById(`ex4-row-${row.id}`);
+
+        const ok1 = s1.value === row.g1;
+        const ok2 = s2.value === row.g2;
+
+        s1.style.borderColor = ok1 ? '#15803d' : '#b91c1c';
+        s2.style.borderColor = ok2 ? '#15803d' : '#b91c1c';
+
+        if (ok1 && ok2) {
+          rEl.classList.add('correct'); rEl.classList.remove('wrong');
+          correct++;
+        } else {
+          rEl.classList.add('wrong'); rEl.classList.remove('correct');
+        }
+      });
+
+      document.getElementById('ex4Score').textContent = correct;
+      const fb = document.getElementById('ex4Feedback');
+      if (correct === 8) {
+        fb.style.color = '#15803d'; fb.textContent = '✨ All 8 sentences classified correctly!';
+        playBeep('correct');
+      } else {
+        fb.style.color = '#b91c1c'; fb.textContent = `${correct} of 8 correct. Review B (Verb) vs T (Time word).`;
+        playBeep('wrong');
+      }
+      updateTotal();
+    }
+
+    function resetEx4() {
+      EX4_DATA.forEach(row => {
+        const s1 = document.getElementById(`ex4-g1-${row.id}`);
+        const s2 = document.getElementById(`ex4-g2-${row.id}`);
+        const rEl = document.getElementById(`ex4-row-${row.id}`);
+        s1.value = ''; s2.value = '';
+        s1.style.borderColor = ''; s2.style.borderColor = '';
+        rEl.classList.remove('correct', 'wrong');
+      });
+      document.getElementById('ex4Score').textContent = '0';
+      document.getElementById('ex4Feedback').textContent = '';
+      updateTotal();
+    }
+
+    // Exercise 5 Data
+    const EX5_DATA = [
+      { id: 1, text: "There {gap1} a family lunch {gap2}.", a1: ["'s", "is"], a2: ["every month"] },
+      { id: 2, text: "{gap1}, there {gap2} a big meeting in the office.", a1: ["yesterday"], a2: ["was"] },
+      { id: 3, text: "{gap1} there a party in the office {gap2}?", a1: ["is"], a2: ["every year"] },
+      { id: 4, text: "There {gap1} a street party in my town {gap2}.", a1: ["was"], a2: ["last month"] },
+      { id: 5, text: "{gap1} there a meeting {gap2}?", a1: ["is"], a2: ["every week"] },
+      { id: 6, text: "There {gap1} a birthday party for John {gap2}.", a1: ["was"], a2: ["yesterday"] },
+      { id: 7, text: "{gap1}, I {gap2} at a meeting with Tanya.", a1: ["last week"], a2: ["was"] },
+      { id: 8, text: "Sophie's birthday {gap1} in March. There's {gap2} a big party.", a1: ["is"], a2: ["always"] }
+    ];
+
+    function renderEx5() {
+      const container = document.getElementById('ex5List');
+      container.innerHTML = '';
+      EX5_DATA.forEach(row => {
+        const div = document.createElement('div');
+        div.className = 'sentence-row';
+        div.id = `ex5-row-${row.id}`;
+
+        let html = `<span class="row-num">${row.id}</span>`;
+        let replaced = row.text
+          .replace('{gap1}', `<input type="text" class="fill-input" id="ex5-i1-${row.id}" placeholder="____" autocomplete="off" />`)
+          .replace('{gap2}', `<input type="text" class="fill-input" id="ex5-i2-${row.id}" placeholder="____" autocomplete="off" />`);
+
+        div.innerHTML = html + replaced;
+        container.appendChild(div);
+      });
+    }
+
+    function cleanWord(str) {
+      return str.toLowerCase().replace(/[.,!?]/g, '').trim();
+    }
+
+    function checkEx5() {
+      let correct = 0;
+      EX5_DATA.forEach(row => {
+        const i1 = document.getElementById(`ex5-i1-${row.id}`);
+        const i2 = document.getElementById(`ex5-i2-${row.id}`);
+        const rEl = document.getElementById(`ex5-row-${row.id}`);
+
+        const v1 = cleanWord(i1.value);
+        const v2 = cleanWord(i2.value);
+
+        const ok1 = row.a1.some(a => cleanWord(a) === v1);
+        const ok2 = row.a2.some(a => cleanWord(a) === v2);
+
+        i1.classList.toggle('correct', ok1);
+        i2.classList.toggle('correct', ok2);
+
+        if (ok1 && ok2) {
+          rEl.classList.add('correct'); rEl.classList.remove('wrong');
+          correct++;
+        } else {
+          rEl.classList.add('wrong'); rEl.classList.remove('correct');
+        }
+      });
+
+      document.getElementById('ex5Score').textContent = correct;
+      const fb = document.getElementById('ex5Feedback');
+      if (correct === 8) {
+        fb.style.color = '#15803d'; fb.textContent = '🎉 Excellent! All missing words filled correctly!';
+        playBeep('correct');
+      } else {
+        fb.style.color = '#b91c1c'; fb.textContent = `${correct} of 8 correct. Listen again or click Help!`;
+        playBeep('wrong');
+      }
+      updateTotal();
+    }
+
+    function hintEx5() {
+      for (let i = 0; i < EX5_DATA.length; i++) {
+        const row = EX5_DATA[i];
+        const i1 = document.getElementById(`ex5-i1-${row.id}`);
+        const i2 = document.getElementById(`ex5-i2-${row.id}`);
+        if (!i1.classList.contains('correct') || !i2.classList.contains('correct')) {
+          i1.value = row.a1[0];
+          i2.value = row.a2[0];
+          checkEx5();
+          return;
+        }
+      }
+    }
+
+    function resetEx5() {
+      EX5_DATA.forEach(row => {
+        const i1 = document.getElementById(`ex5-i1-${row.id}`);
+        const i2 = document.getElementById(`ex5-i2-${row.id}`);
+        const rEl = document.getElementById(`ex5-row-${row.id}`);
+        i1.value = ''; i2.value = '';
+        i1.classList.remove('correct'); i2.classList.remove('correct');
+        rEl.classList.remove('correct', 'wrong');
+      });
+      document.getElementById('ex5Score').textContent = '0';
+      document.getElementById('ex5Feedback').textContent = '';
+      updateTotal();
+    }
+
+    function updateTotal() {
+      const e4 = (parseInt(document.getElementById('ex4Score').textContent) || 0) * 100;
+      const e5 = (parseInt(document.getElementById('ex5Score').textContent) || 0) * 100;
+      document.getElementById('totalScore').textContent = e4 + e5;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderEx4();
+      renderEx5();
+    });
+  </script>
+</body>
+</html>
