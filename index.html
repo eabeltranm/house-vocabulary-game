@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>House Vocabulary Game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #e0e7ff;
+      --secondary: #0ea5e9;
+      --success: #10b981;
+      --success-light: #d1fae5;
+      --danger: #ef4444;
+      --danger-light: #fee2e2;
+      --warning: #f59e0b;
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+      --card-bg: rgba(255, 255, 255, 0.08);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --badge-bg: rgba(99, 102, 241, 0.2);
+      --radius-lg: 20px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --shadow-glow: 0 10px 30px -10px rgba(79, 70, 229, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem 1rem 3rem;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      animation: fadeInDown 0.6s ease-out;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--badge-bg);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #a5b4fc;
+      margin-bottom: 0.6rem;
+      backdrop-filter: blur(8px);
+    }
+
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.75rem);
+      font-weight: 800;
+      background: linear-gradient(to right, #ffffff, #c7d2fe, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.4rem;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 600px;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      width: 100%;
+      max-width: 1100px;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .stat-pill {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(12px);
+      padding: 0.5rem 1.25rem;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .stat-pill span.value {
+      color: #38bdf8;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+    }
+
+    /* Main Container */
+    .game-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 1100px;
+      animation: fadeInUp 0.7s ease-out;
+    }
+
+    @media (max-width: 860px) {
+      .game-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Board Area */
+    .board-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow-glow);
+      position: relative;
+    }
+
+    .board-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+    }
+
+    .board-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    /* Interactive Overlay Hotspots on Image */
+    .hotspot {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: rgba(79, 70, 229, 0.85);
+      border: 2px solid #ffffff;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 10;
+    }
+
+    .hotspot:hover {
+      transform: translate(-50%, -50%) scale(1.25);
+      background: #38bdf8;
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.8);
+    }
+
+    .hotspot.matched {
+      background: #10b981;
+      border-color: #a7f3d0;
+      cursor: default;
+    }
+
+    .hotspot.active {
+      background: #f59e0b;
+      transform: translate(-50%, -50%) scale(1.3);
+      animation: pulse 1.2s infinite;
+    }
+
+    /* Interactive Panel */
+    .interactive-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .tab-bar {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 4px;
+      border-radius: var(--radius-md);
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 8px 12px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+    }
+
+    /* Question / Instruction Section */
+    .task-header {
+      margin-bottom: 1rem;
+    }
+
+    .task-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.25rem;
+    }
+
+    .task-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* Match Mode: Vocabulary Grid */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+
+    .word-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      padding: 0.75rem 0.6rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      user-select: none;
+    }
+
+    .word-card:hover:not(.disabled) {
+      background: rgba(79, 70, 229, 0.25);
+      border-color: #6366f1;
+      transform: translateY(-2px);
+    }
+
+    .word-card.selected {
+      background: #4f46e5;
+      border-color: #818cf8;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+      transform: scale(1.03);
+    }
+
+    .word-card.matched {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: var(--success);
+      color: #6ee7b7;
+      cursor: default;
+    }
+
+    .word-card.error {
+      animation: shake 0.4s ease;
+      background: rgba(239, 68, 68, 0.25);
+      border-color: var(--danger);
+    }
+
+    .word-card .letter-badge {
+      font-size: 0.75rem;
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-bottom: 2px;
+    }
+
+    /* Quiz Mode Options */
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .quiz-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 0.9rem 1.2rem;
+      border-radius: var(--radius-md);
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .quiz-btn:hover:not(:disabled) {
+      background: rgba(79, 70, 229, 0.25);
+      border-color: #6366f1;
+    }
+
+    .quiz-btn.correct {
+      background: rgba(16, 185, 129, 0.3) !important;
+      border-color: var(--success) !important;
+    }
+
+    .quiz-btn.wrong {
+      background: rgba(239, 68, 68, 0.3) !important;
+      border-color: var(--danger) !important;
+    }
+
+    /* Audio Speaker Button */
+    .audio-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #38bdf8;
+      font-size: 1.2rem;
+      transition: all 0.2s;
+      margin-left: 8px;
+    }
+
+    .audio-btn:hover {
+      background: #38bdf8;
+      color: #0f172a;
+      transform: scale(1.1);
+    }
+
+    /* Action / Controls Bar */
+    .control-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: auto;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 0.8rem 1.2rem;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #cbd5e1;
+    }
+
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+
+    /* Feedback Modal / Alert */
+    .message-banner {
+      min-height: 28px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: center;
+      margin-top: 0.5rem;
+      transition: all 0.3s;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+      50% { box-shadow: 0 0 0 12px rgba(245, 158, 11, 0); }
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    /* Celebration Banner */
+    .winner-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.92);
+      border-radius: var(--radius-lg);
+      z-index: 50;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+      backdrop-filter: blur(8px);
+      animation: fadeIn 0.4s ease;
+    }
+
+    .winner-overlay.show {
+      display: flex;
+    }
+
+    .winner-overlay h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.2rem;
+      color: #38bdf8;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="badge">🏡 English Learning Interactive</div>
+    <h1>House Vocabulary Game</h1>
+    <p class="subtitle">Explore the house, match the letters A–K with the right vocabulary words, and test your knowledge!</p>
+  </header>
+
+  <!-- Statistics -->
+  <div class="stats-bar">
+    <div class="stat-pill">⭐ Score: <span class="value" id="score">0</span></div>
+    <div class="stat-pill">🎯 Matches: <span class="value" id="matchedCount">0</span> / 11</div>
+    <div class="stat-pill">🔥 Streak: <span class="value" id="streak">0</span></div>
+    <div class="stat-pill">⏱️ Timer: <span class="value" id="timer">00:00</span></div>
+  </div>
+
+  <!-- Game Arena -->
+  <main class="game-container">
+    
+    <!-- Left: House Plan Board Image -->
+    <div class="board-card">
+      <div class="board-wrapper" id="boardWrapper">
+        <img src="house_plan.png" alt="House Plan" class="board-image" id="boardImg" />
+        
+        <!-- Hotspots placed relative to the house layout -->
+        <div class="hotspot" style="top: 11%; left: 3.5%;" data-letter="A" title="Letter A">A</div>
+        <div class="hotspot" style="top: 15%; left: 30.5%;" data-letter="B" title="Letter B">B</div>
+        <div class="hotspot" style="top: 13%; left: 53.5%;" data-letter="C" title="Letter C">C</div>
+        <div class="hotspot" style="top: 11.5%; left: 64.5%;" data-letter="D" title="Letter D">D</div>
+        <div class="hotspot" style="top: 20%; left: 72%;" data-letter="E" title="Letter E">E</div>
+        <div class="hotspot" style="top: 46%; left: 3.5%;" data-letter="F" title="Letter F">F</div>
+        <div class="hotspot" style="top: 47%; left: 12%;" data-letter="G" title="Letter G">G</div>
+        <div class="hotspot" style="top: 47%; left: 26%;" data-letter="H" title="Letter H">H</div>
+        <div class="hotspot" style="top: 66.5%; left: 38.5%;" data-letter="I" title="Letter I">I</div>
+        <div class="hotspot" style="top: 63.5%; left: 81%;" data-letter="J" title="Letter J">J</div>
+        <div class="hotspot" style="top: 82%; left: 47%;" data-letter="K" title="Letter K">K</div>
+      </div>
+    </div>
+
+    <!-- Right: Interactive Panel -->
+    <div class="interactive-card">
+      
+      <!-- Mode Tabs -->
+      <div class="tab-bar">
+        <button class="tab-btn active" id="tabMatch" onclick="switchMode('match')">🧩 Match Mode</button>
+        <button class="tab-btn" id="tabQuiz" onclick="switchMode('quiz')">❓ Quiz Mode</button>
+        <button class="tab-btn" id="tabListen" onclick="switchMode('listen')">🔊 Listen & Find</button>
+      </div>
+
+      <!-- Mode 1: Match Words -->
+      <div id="matchSection">
+        <div class="task-header">
+          <div class="task-title" id="matchInstruction">1. Select a letter on the house or a word below</div>
+          <div class="task-desc">Match every room and furniture piece to its letter!</div>
+        </div>
+
+        <div class="vocab-grid" id="vocabGrid">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Mode 2: Quiz -->
+      <div id="quizSection" style="display: none;">
+        <div class="task-header">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div class="task-title" id="quizQuestion">Question 1 of 11</div>
+            <button class="audio-btn" id="quizAudioBtn" onclick="speakCurrentWord()" title="Listen to pronunciation">🔊</button>
+          </div>
+          <div class="task-desc" id="quizPrompt">Identify the item corresponding to letter A:</div>
+        </div>
+
+        <div class="quiz-options" id="quizOptions">
+          <!-- Quiz options generated here -->
+        </div>
+      </div>
+
+      <!-- Mode 3: Listen & Find -->
+      <div id="listenSection" style="display: none;">
+        <div class="task-header">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="task-title">Listen & Click the House!</div>
+            <button class="audio-btn" onclick="playTargetWordAudio()" title="Replay word">🔊</button>
+          </div>
+          <div class="task-desc" id="listenPrompt">Press play and click the matching letter on the house image.</div>
+        </div>
+        <div style="margin: 2rem 0; text-align: center;">
+          <button class="btn btn-primary" style="margin: 0 auto; max-width: 200px;" onclick="playTargetWordAudio()">
+            🔊 Play Audio Word
+          </button>
+        </div>
+      </div>
+
+      <!-- Feedback Banner -->
+      <div class="message-banner" id="messageBanner"></div>
+
+      <!-- Controls -->
+      <div class="control-actions">
+        <button class="btn btn-outline" onclick="hintLetter()">💡 Hint</button>
+        <button class="btn btn-primary" onclick="restartGame()">🔄 Restart</button>
+      </div>
+
+      <!-- Victory Overlay -->
+      <div class="winner-overlay" id="winnerOverlay">
+        <h2>🎉 Outstanding!</h2>
+        <p style="margin-bottom: 1.5rem; color: #cbd5e1;">You mastered all the house vocabulary words!</p>
+        <div style="font-size: 1.1rem; margin-bottom: 1.5rem;">
+          Final Score: <strong style="color: #38bdf8;" id="finalScore">0</strong> in <strong style="color: #38bdf8;" id="finalTime">00:00</strong>
+        </div>
+        <button class="btn btn-primary" style="max-width: 220px;" onclick="restartGame()">Play Again</button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    // Vocabulary Data matching the house plan
+    const VOCAB_DATA = [
+      { letter: 'A', word: 'Upstairs', category: 'Floor', hint: 'The top level of the house' },
+      { letter: 'B', word: 'Wardrobe', category: 'Bedroom', hint: 'Tall cupboard where clothes are hung' },
+      { letter: 'C', word: 'Curtains', category: 'Bedroom', hint: 'Fabric hung over the bedroom window' },
+      { letter: 'D', word: 'Shower', category: 'Bathroom', hint: 'Water spray in the bathroom' },
+      { letter: 'E', word: 'Bathtub', category: 'Bathroom', hint: 'Large tub filled with water for washing' },
+      { letter: 'F', word: 'Downstairs', category: 'Floor', hint: 'The ground level of the house' },
+      { letter: 'G', word: 'Cupboard', category: 'Kitchen', hint: 'Cabinet storing dishes and cups' },
+      { letter: 'H', word: 'Fridge', category: 'Kitchen', hint: 'Cold appliance for keeping food fresh' },
+      { letter: 'I', word: 'Dining table', category: 'Dining area', hint: 'Table and floor area downstairs' },
+      { letter: 'J', word: 'Garage', category: 'Storage', hint: 'Room with roller door for boxes and car' },
+      { letter: 'K', word: 'Garden', category: 'Outdoor', hint: 'Lawn and yard outside the house' }
+    ];
+
+    let currentMode = 'match';
+    let selectedLetter = null;
+    let selectedWord = null;
+    let matchedLetters = new Set();
+    let score = 0;
+    let streak = 0;
+    let timerSeconds = 0;
+    let timerInterval = null;
+
+    // Quiz State
+    let quizIndex = 0;
+    let quizQuestions = [];
+
+    // Listen State
+    let listenTarget = null;
+
+    // Sound Synthesizer (Web Audio API)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playSound(type) {
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      if (type === 'success') {
+        osc.frequency.setValueAtTime(523.25, now); // C5
+        osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.15); // G5
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.3);
+      } else if (type === 'error') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.linearRampToValueAtTime(130, now + 0.2);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+        osc.start(now);
+        osc.stop(now + 0.25);
+      } else if (type === 'win') {
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+          const noteOsc = audioCtx.createOscillator();
+          const noteGain = audioCtx.createGain();
+          noteOsc.connect(noteGain);
+          noteGain.connect(audioCtx.destination);
+          noteOsc.frequency.setValueAtTime(freq, now + i * 0.1);
+          noteGain.gain.setValueAtTime(0.2, now + i * 0.1);
+          noteGain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.1 + 0.25);
+          noteOsc.start(now + i * 0.1);
+          noteOsc.stop(now + i * 0.1 + 0.25);
+        });
+      }
+    }
+
+    // Text to Speech
+    function speakText(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 0.9;
+        utterance.lang = 'en-US';
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    // Initialize
+    function init() {
+      startTimer();
+      renderVocabGrid();
+      setupHotspots();
+      updateStats();
+    }
+
+    // Timer
+    function startTimer() {
+      clearInterval(timerInterval);
+      timerSeconds = 0;
+      timerInterval = setInterval(() => {
+        timerSeconds++;
+        const mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+        const secs = String(timerSeconds % 60).padStart(2, '0');
+        document.getElementById('timer').textContent = `${mins}:${secs}`;
+      }, 1000);
+    }
+
+    // Render Vocab Grid
+    function renderVocabGrid() {
+      const grid = document.getElementById('vocabGrid');
+      grid.innerHTML = '';
+
+      // Shuffle list
+      const shuffled = [...VOCAB_DATA].sort(() => Math.random() - 0.5);
+
+      shuffled.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'word-card';
+        card.dataset.word = item.word;
+        card.dataset.letter = item.letter;
+        card.innerHTML = `<span>${item.word}</span>`;
+        
+        card.addEventListener('click', () => onWordClick(card, item));
+        grid.appendChild(card);
+      });
+    }
+
+    // Setup Hotspots
+    function setupHotspots() {
+      document.querySelectorAll('.hotspot').forEach(spot => {
+        spot.addEventListener('click', () => {
+          const letter = spot.dataset.letter;
+          onHotspotClick(spot, letter);
+        });
+      });
+    }
+
+    // Click Hotspot on image
+    function onHotspotClick(spot, letter) {
+      if (matchedLetters.has(letter)) return;
+
+      if (currentMode === 'listen') {
+        checkListenAnswer(letter);
+        return;
+      }
+
+      if (currentMode === 'match') {
+        selectedLetter = letter;
+        document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active'));
+        spot.classList.add('active');
+
+        if (selectedWord) {
+          evaluateMatch();
+        } else {
+          showBanner(`Selected Letter ${letter}. Now select the matching word!`, '#38bdf8');
+        }
+      }
+    }
+
+    // Click Word Card
+    function onWordClick(card, item) {
+      if (matchedLetters.has(item.letter)) return;
+
+      selectedWord = item.word;
+      document.querySelectorAll('.word-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+
+      speakText(item.word);
+
+      if (selectedLetter) {
+        evaluateMatch();
+      } else {
+        showBanner(`Selected "${item.word}". Now click its letter on the house!`, '#38bdf8');
+      }
+    }
+
+    // Evaluate Match
+    function evaluateMatch() {
+      const item = VOCAB_DATA.find(d => d.letter === selectedLetter);
+      const isCorrect = item && item.word.toLowerCase() === selectedWord.toLowerCase();
+
+      const hotspot = document.querySelector(`.hotspot[data-letter="${selectedLetter}"]`);
+      const wordCard = document.querySelector(`.word-card[data-word="${selectedWord}"]`);
+
+      if (isCorrect) {
+        matchedLetters.add(selectedLetter);
+        score += 100 + (streak * 20);
+        streak++;
+        playSound('success');
+
+        hotspot.classList.remove('active');
+        hotspot.classList.add('matched');
+
+        if (wordCard) {
+          wordCard.classList.remove('selected');
+          wordCard.classList.add('matched');
+          wordCard.innerHTML = `<span class="letter-badge">${selectedLetter}</span><span>${selectedWord}</span>`;
+        }
+
+        showBanner(`✅ Correct! ${selectedLetter} is ${selectedWord}!`, '#10b981');
+
+        if (matchedLetters.size === VOCAB_DATA.length) {
+          onGameWon();
+        }
+      } else {
+        streak = 0;
+        playSound('error');
+        if (wordCard) {
+          wordCard.classList.add('error');
+          setTimeout(() => wordCard.classList.remove('error'), 500);
+        }
+        showBanner(`❌ Not quite! Try again.`, '#ef4444');
+      }
+
+      selectedLetter = null;
+      selectedWord = null;
+      document.querySelectorAll('.hotspot').forEach(h => {
+        if (!matchedLetters.has(h.dataset.letter)) h.classList.remove('active');
+      });
+      document.querySelectorAll('.word-card').forEach(c => {
+        if (!matchedLetters.has(c.dataset.letter)) c.classList.remove('selected');
+      });
+
+      updateStats();
+    }
+
+    // Quiz Mode Logic
+    function startQuizMode() {
+      quizIndex = 0;
+      quizQuestions = [...VOCAB_DATA].sort(() => Math.random() - 0.5);
+      renderQuizQuestion();
+    }
+
+    function renderQuizQuestion() {
+      if (quizIndex >= quizQuestions.length) {
+        onGameWon();
+        return;
+      }
+
+      const q = quizQuestions[quizIndex];
+      document.getElementById('quizQuestion').textContent = `Question ${quizIndex + 1} of ${quizQuestions.length}`;
+      document.getElementById('quizPrompt').textContent = `What is letter ${q.letter} on the house?`;
+
+      // Highlight target hotspot
+      document.querySelectorAll('.hotspot').forEach(h => {
+        h.classList.remove('active');
+        if (h.dataset.letter === q.letter) {
+          h.classList.add('active');
+        }
+      });
+
+      // Generate 4 options
+      const options = [q.word];
+      const others = VOCAB_DATA.filter(v => v.letter !== q.letter).map(v => v.word).sort(() => Math.random() - 0.5);
+      options.push(others[0], others[1], others[2]);
+      options.sort(() => Math.random() - 0.5);
+
+      const container = document.getElementById('quizOptions');
+      container.innerHTML = '';
+
+      options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-btn';
+        btn.innerHTML = `<span>${opt}</span> <span>👉</span>`;
+        btn.onclick = () => onQuizSelect(btn, opt, q.word);
+        container.appendChild(btn);
+      });
+    }
+
+    function onQuizSelect(btn, chosen, correct) {
+      const allBtns = document.querySelectorAll('.quiz-btn');
+      allBtns.forEach(b => b.disabled = true);
+
+      if (chosen === correct) {
+        btn.classList.add('correct');
+        playSound('success');
+        score += 120 + (streak * 25);
+        streak++;
+        showBanner(`✨ Correct!`, '#10b981');
+      } else {
+        btn.classList.add('wrong');
+        streak = 0;
+        playSound('error');
+        allBtns.forEach(b => {
+          if (b.innerText.includes(correct)) b.classList.add('correct');
+        });
+        showBanner(`Incorrect. The answer is ${correct}.`, '#ef4444');
+      }
+
+      updateStats();
+      setTimeout(() => {
+        quizIndex++;
+        renderQuizQuestion();
+      }, 1200);
+    }
+
+    function speakCurrentWord() {
+      if (quizQuestions[quizIndex]) {
+        speakText(quizQuestions[quizIndex].word);
+      }
+    }
+
+    // Listen & Find Mode
+    function startListenMode() {
+      const remaining = VOCAB_DATA.filter(v => !matchedLetters.has(v.letter));
+      if (remaining.length === 0) {
+        onGameWon();
+        return;
+      }
+      listenTarget = remaining[Math.floor(Math.random() * remaining.length)];
+      showBanner('🔊 Click "Play Audio Word" then choose the letter!', '#38bdf8');
+      playTargetWordAudio();
+    }
+
+    function playTargetWordAudio() {
+      if (listenTarget) {
+        speakText(listenTarget.word);
+      }
+    }
+
+    function checkListenAnswer(letter) {
+      if (letter === listenTarget.letter) {
+        matchedLetters.add(letter);
+        score += 150;
+        streak++;
+        playSound('success');
+        showBanner(`🎯 Great job! ${listenTarget.word} is letter ${letter}!`, '#10b981');
+
+        const spot = document.querySelector(`.hotspot[data-letter="${letter}"]`);
+        if (spot) spot.classList.add('matched');
+
+        updateStats();
+
+        if (matchedLetters.size === VOCAB_DATA.length) {
+          onGameWon();
+        } else {
+          setTimeout(startListenMode, 1200);
+        }
+      } else {
+        playSound('error');
+        showBanner(`❌ Try listening again!`, '#ef4444');
+      }
+    }
+
+    // Mode Switcher
+    function switchMode(mode) {
+      currentMode = mode;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('matchSection').style.display = 'none';
+      document.getElementById('quizSection').style.display = 'none';
+      document.getElementById('listenSection').style.display = 'none';
+
+      if (mode === 'match') {
+        document.getElementById('tabMatch').classList.add('active');
+        document.getElementById('matchSection').style.display = 'block';
+      } else if (mode === 'quiz') {
+        document.getElementById('tabQuiz').classList.add('active');
+        document.getElementById('quizSection').style.display = 'block';
+        startQuizMode();
+      } else if (mode === 'listen') {
+        document.getElementById('tabListen').classList.add('active');
+        document.getElementById('listenSection').style.display = 'block';
+        startListenMode();
+      }
+    }
+
+    // Hint
+    function hintLetter() {
+      const unmatched = VOCAB_DATA.filter(v => !matchedLetters.has(v.letter));
+      if (unmatched.length === 0) return;
+      const target = unmatched[0];
+      showBanner(`💡 Hint for ${target.letter}: "${target.hint}"`, '#f59e0b');
+      speakText(target.hint);
+    }
+
+    // Stats & Feedback
+    function updateStats() {
+      document.getElementById('score').textContent = score;
+      document.getElementById('matchedCount').textContent = matchedLetters.size;
+      document.getElementById('streak').textContent = streak;
+    }
+
+    function showBanner(text, color = '#ffffff') {
+      const banner = document.getElementById('messageBanner');
+      banner.style.color = color;
+      banner.textContent = text;
+    }
+
+    function onGameWon() {
+      playSound('win');
+      clearInterval(timerInterval);
+      document.getElementById('finalScore').textContent = score;
+      document.getElementById('finalTime').textContent = document.getElementById('timer').textContent;
+      document.getElementById('winnerOverlay').classList.add('show');
+    }
+
+    function restartGame() {
+      matchedLetters.clear();
+      selectedLetter = null;
+      selectedWord = null;
+      score = 0;
+      streak = 0;
+      document.getElementById('winnerOverlay').classList.remove('show');
+      document.querySelectorAll('.hotspot').forEach(h => {
+        h.className = 'hotspot';
+      });
+      init();
+      if (currentMode === 'quiz') startQuizMode();
+      if (currentMode === 'listen') startListenMode();
+      showBanner('Game reset! Have fun!', '#38bdf8');
+    }
+
+    // Start on load
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
